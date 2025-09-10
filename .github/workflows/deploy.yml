@@ -1,38 +1,69 @@
-name: Deploy to GitHub Pages
-
-on:
-  push:
-    branches: ["main"]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - run: npm ci
-      - run: npm test
-      - run: mkdir dist
-      - run: cp -r public/* dist/
-      - run: cp workflow.json dist/
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+diff --git a/.github/workflows/deploy.yml b/.github/workflows/deploy.yml
+index 5f726b68650a504b30291b628260cda408ea0342..229e9ce4fe9fdb2633ebff7dc24f19566fbe29f8 100644
+--- a/.github/workflows/deploy.yml
++++ b/.github/workflows/deploy.yml
+@@ -1,34 +1,40 @@
+-name: Deploy WebApp
++name: Deploy to GitHub Pages
+ 
+ on:
+   push:
+-    branches: [main]
+-  pull_request:
+-    branches: [main]
++    branches: ["main"]
++  workflow_dispatch:
++
++permissions:
++  contents: read
++  pages: write
++  id-token: write
+ 
+ jobs:
+-  build-and-deploy:
++  build:
+     runs-on: ubuntu-latest
+     steps:
+-      - name: Checkout repository
+-        uses: actions/checkout@v4
+-
+-      - name: Setup Node.js
+-        uses: actions/setup-node@v4
++      - uses: actions/checkout@v4
++      - uses: actions/configure-pages@v4
++      - uses: actions/setup-node@v4
+         with:
+           node-version: 20
+-          cache: 'npm'
+-
+-      - name: Install dependencies
+-        run: npm ci
+-
+-      - name: Run tests
+-        run: npm test
++          cache: npm
++      - run: npm ci
++      - run: npm test
++      - run: mkdir dist
++      - run: cp -r public/* dist/
++      - run: cp workflow.json dist/
++      - uses: actions/upload-pages-artifact@v3
++        with:
++          path: dist
+ 
+-      - name: Deploy
+-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+-        env:
+-          N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
+-        run: |
+-          # TODO: add deployment commands (e.g., scp, rsync, or platform CLI)
+-          echo "Deploy step - customize for your hosting provider"
++  deploy:
++    needs: build
++    runs-on: ubuntu-latest
++    environment:
++      name: github-pages
++      url: ${{ steps.deployment.outputs.page_url }}
++    steps:
++      - id: deployment
++        uses: actions/deploy-pages@v4
