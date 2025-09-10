@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CRM Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    #output { white-space: pre; background: #f0f0f0; padding: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>CRM Dashboard</h1>
+  <button id="runBtn">Run Analysis</button>
+  <h2>Workflow</h2>
+  <pre id="workflow"></pre>
+  <h2>Output</h2>
+  <pre id="output"></pre>
+<script>
+async function loadWorkflow() {
+  const res = await fetch('/api/workflow');
+  const data = await res.json();
+  document.getElementById('workflow').textContent = JSON.stringify(data, null, 2);
+}
+async function runAnalysis() {
+  const res = await fetch('/api/run');
+  const data = await res.json();
+  document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+}
+loadWorkflow();
+document.getElementById('runBtn').addEventListener('click', runAnalysis);
+</script>
+</body>
+</html>
