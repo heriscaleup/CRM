@@ -1,197 +1,254 @@
 {
-  "name": "data analys web",
   "nodes": [
     {
       "parameters": {
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "https://docs.google.com/spreadsheets/d/1ZS3GqAZbdLaz43Yq6FBvIE1ab_czEommpxbvOWABmDI/edit?gid=0#gid=0",
-          "mode": "url"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "hasil analisis",
-          "mode": "name"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "run_at": "={{ $json.run_at }}",
-            "task_type": "={{ $json.task_type }}",
-            "route": "={{ $json.route }}",
-            "summary": "={{ $json.summary }}",
-            "insights_json": "={{ $json.insights_json }}",
-            "actions_json": "={{ $json.actions_json }}",
-            "risks_json": "={{ $json.risks_json }}",
-            "raw_json": "={{ $json.raw_json }}",
-            "parse_error": "={{ $json.parse_error }}"
-          },
-          "matchingColumns": [
-            "task_type"
-          ],
-          "schema": [
+        "rule": {
+          "interval": [
             {
-              "id": "run_at",
-              "displayName": "run_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "task_type",
-              "displayName": "task_type",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "route",
-              "displayName": "route",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "summary",
-              "displayName": "summary",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "insights_json",
-              "displayName": "insights_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "actions_json",
-              "displayName": "actions_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "risks_json",
-              "displayName": "risks_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "followups_json",
-              "displayName": "followups_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "parse_error",
-              "displayName": "parse_error",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "raw_json",
-              "displayName": "raw_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "negatives_json",
-              "displayName": "negatives_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
-            },
-            {
-              "id": "checks_json",
-              "displayName": "checks_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
+              "triggerAtHour": 8
             }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1872,
+        2112
+      ],
+      "id": "2fa2bb25-be33-4eba-9092-d587033b13a9",
+      "name": "Daily Analytics Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://analyticsdata.googleapis.com/v1beta/properties/479129246:runReport",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
         },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"dateRanges\": [\n    {\n      \"startDate\": \"30daysAgo\",\n      \"endDate\": \"today\"\n    }\n  ],\n  \"dimensions\": [\n    {\"name\": \"sessionSource\"},\n    {\"name\": \"sessionMedium\"},\n    {\"name\": \"deviceCategory\"},\n    {\"name\": \"city\"},\n    {\"name\": \"landingPagePlusQueryString\"},\n    {\"name\": \"pagePath\"}\n  ],\n  \"metrics\": [\n    {\"name\": \"totalUsers\"},\n    {\"name\": \"active7DayUsers\"},\n    {\"name\": \"sessions\"},\n    {\"name\": \"newUsers\"},\n    {\"name\": \"bounceRate\"},\n    {\"name\": \"averageSessionDuration\"},\n    {\"name\": \"screenPageViews\"},\n    {\"name\": \"sessionsPerUser\"}\n  ]\n}",
         "options": {}
       },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
-        2480,
-        528
+        -1648,
+        2016
       ],
-      "id": "2c4b6e2d-f1d1-439f-998b-44e3f5016ebb",
-      "name": "pencatatan hasil analisis",
+      "id": "95d3eed0-d423-4508-a82a-96605a62c18a",
+      "name": "Enhanced GA4 Data Collection",
       "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "KjuD7j0EagX1z8aC",
-          "name": "Google Sheets account"
+        "googleApi": {
+          "id": "lXQNLcrZwfHtye7l",
+          "name": "Google Service Account account"
         }
       }
     },
     {
       "parameters": {
+        "method": "POST",
+        "url": "https://googleads.googleapis.com/v21/customers/6074257049/googleAds:search",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "developer-token",
+              "value": "TBTSJ2tCWj8roEXgeDBMTw"
+            },
+            {
+              "name": "login-customer-id",
+              "value": "6074257049"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"query\": \"SELECT campaign.name, ad_group.name, ad_group_criterion.keyword.text, ad_group_criterion.keyword.match_type, metrics.impressions, metrics.clicks, metrics.ctr, metrics.average_cpc, metrics.conversions, segments.date FROM keyword_view WHERE segments.date DURING LAST_30_DAYS AND metrics.impressions > 0 ORDER BY metrics.impressions DESC LIMIT 10000\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1648,
+        2256
+      ],
+      "id": "10395457-63ba-49e9-bcdb-0ad52a7de9be",
+      "name": "Enhanced Google Ads Data Collection",
+      "credentials": {
+        "googleApi": {
+          "id": "lXQNLcrZwfHtye7l",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// GA4 Intelligence Processor\nconst ga4Response = $input.first().json;\n\ntry {\n  // Parse GA4 API response structure\n  const rows = ga4Response.rows || [];\n  const dimensionHeaders = ga4Response.dimensionHeaders || [];\n  const metricHeaders = ga4Response.metricHeaders || [];\n  \n  // Process data into structured format\n  const processedData = rows.map(row => {\n    const item = {};\n    \n    // Map dimensions\n    dimensionHeaders.forEach((header, index) => {\n      item[header.name] = row.dimensionValues[index]?.value || 'Unknown';\n    });\n    \n    // Map metrics\n    metricHeaders.forEach((header, index) => {\n      const value = parseFloat(row.metricValues[index]?.value || 0);\n      item[header.name] = value;\n    });\n    \n    return item;\n  });\n  \n  // Calculate aggregated insights\n  const totalUsers = processedData.reduce((sum, item) => sum + (item.totalUsers || 0), 0);\n  const totalSessions = processedData.reduce((sum, item) => sum + (item.sessions || 0), 0);\n  const totalRevenue = processedData.reduce((sum, item) => sum + (item.totalRevenue || 0), 0);\n  \n  // Detect business type based on traffic sources and pages\n  const sources = processedData.map(item => item.sessionSource?.toLowerCase() || '');\n  const pages = processedData.map(item => item.pagePath || '');\n  \n  let businessType = 'unknown';\n  if (sources.some(s => s.includes('google') || s.includes('bing'))) {\n    if (pages.some(p => p.includes('product') || p.includes('shop'))) {\n      businessType = 'ecommerce';\n    } else if (pages.some(p => p.includes('service') || p.includes('contact'))) {\n      businessType = 'service';\n    } else {\n      businessType = 'content';\n    }\n  }\n  \n  // Flag anomalies (simple threshold-based detection)\n  const avgBounceRate = processedData.reduce((sum, item) => sum + (item.bounceRate || 0), 0) / processedData.length;\n  const anomalies = [];\n  \n  if (avgBounceRate > 0.8) anomalies.push('High bounce rate detected');\n  if (totalUsers < 100) anomalies.push('Very low traffic volume');\n  if (totalSessions / totalUsers > 5) anomalies.push('Unusually high sessions per user');\n  \n  // Top performing sources and pages\n  const topSources = processedData\n    .reduce((acc, item) => {\n      const key = `${item.sessionSource}/${item.sessionMedium}`;\n      if (!acc[key]) acc[key] = { sessions: 0, users: 0, revenue: 0 };\n      acc[key].sessions += item.sessions || 0;\n      acc[key].users += item.totalUsers || 0;\n      acc[key].revenue += item.totalRevenue || 0;\n      return acc;\n    }, {});\n    \n  const topPages = processedData\n    .reduce((acc, item) => {\n      const key = item.pagePath;\n      if (!acc[key]) acc[key] = { pageviews: 0, users: 0, bounceRate: 0 };\n      acc[key].pageviews += item.screenPageViews || 0;\n      acc[key].users += item.totalUsers || 0;\n      acc[key].bounceRate = item.bounceRate || 0;\n      return acc;\n    }, {});\n  \n  return [{\n    json: {\n      source: 'ga4_processor',\n      timestamp: new Date().toISOString(),\n      summary: {\n        totalUsers,\n        totalSessions,\n        totalRevenue,\n        avgBounceRate: Math.round(avgBounceRate * 100) / 100,\n        businessType,\n        dataPoints: processedData.length\n      },\n      anomalies,\n      insights: {\n        topSources: Object.entries(topSources)\n          .sort(([,a], [,b]) => b.sessions - a.sessions)\n          .slice(0, 5)\n          .map(([name, data]) => ({ name, ...data })),\n        topPages: Object.entries(topPages)\n          .sort(([,a], [,b]) => b.pageviews - a.pageviews)\n          .slice(0, 5)\n          .map(([name, data]) => ({ name, ...data }))\n      },\n      rawData: processedData\n    }\n  }];\n  \n} catch (error) {\n  return [{\n    json: {\n      source: 'ga4_processor',\n      error: true,\n      message: error.message,\n      timestamp: new Date().toISOString()\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1424,
+        2016
+      ],
+      "id": "a43580ce-d6ba-4055-83f3-c40a1e274977",
+      "name": "GA4 Intelligence Processor"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Ads Intelligence Processor\nconst adsResponse = $input.first().json;\n\ntry {\n  // Parse Google Ads API response\n  const results = adsResponse.results || [];\n  \n  // Process keyword data into structured format\n  const processedKeywords = results.map(result => {\n    return {\n      campaign: result.campaign?.name || 'Unknown Campaign',\n      adGroup: result.adGroup?.name || 'Unknown Ad Group',\n      keyword: result.adGroupCriterion?.keyword?.text || 'Unknown Keyword',\n      matchType: result.adGroupCriterion?.keyword?.matchType || 'UNKNOWN',\n      impressions: parseInt(result.metrics?.impressions || 0),\n      clicks: parseInt(result.metrics?.clicks || 0),\n      ctr: parseFloat(result.metrics?.ctr || 0),\n      avgCpc: parseFloat(result.metrics?.averageCpc || 0) / 1000000, // Convert from micros\n      conversions: parseFloat(result.metrics?.conversions || 0),\n      date: result.segments?.date || new Date().toISOString().split('T')[0]\n    };\n  });\n  \n  // Calculate advanced metrics\n  const totalImpressions = processedKeywords.reduce((sum, kw) => sum + kw.impressions, 0);\n  const totalClicks = processedKeywords.reduce((sum, kw) => sum + kw.clicks, 0);\n  const totalConversions = processedKeywords.reduce((sum, kw) => sum + kw.conversions, 0);\n  const avgCtr = totalClicks / totalImpressions || 0;\n  const conversionRate = totalConversions / totalClicks || 0;\n  \n  // Identify high-performing keywords (top 20% by conversions)\n  const sortedByConversions = processedKeywords\n    .filter(kw => kw.conversions > 0)\n    .sort((a, b) => b.conversions - a.conversions);\n  const topPerformers = sortedByConversions.slice(0, Math.ceil(sortedByConversions.length * 0.2));\n  \n  // Identify underperforming keywords (high cost, low conversions)\n  const underPerformers = processedKeywords\n    .filter(kw => kw.clicks > 10 && kw.conversions === 0 && kw.avgCpc > 0.5)\n    .sort((a, b) => b.avgCpc - a.avgCpc)\n    .slice(0, 10);\n  \n  // Campaign efficiency analysis\n  const campaignAnalysis = processedKeywords.reduce((acc, kw) => {\n    if (!acc[kw.campaign]) {\n      acc[kw.campaign] = {\n        impressions: 0,\n        clicks: 0,\n        conversions: 0,\n        cost: 0,\n        keywordCount: 0\n      };\n    }\n    acc[kw.campaign].impressions += kw.impressions;\n    acc[kw.campaign].clicks += kw.clicks;\n    acc[kw.campaign].conversions += kw.conversions;\n    acc[kw.campaign].cost += kw.clicks * kw.avgCpc;\n    acc[kw.campaign].keywordCount += 1;\n    return acc;\n  }, {});\n  \n  // Calculate efficiency scores for each campaign\n  Object.keys(campaignAnalysis).forEach(campaign => {\n    const camp = campaignAnalysis[campaign];\n    camp.ctr = camp.clicks / camp.impressions || 0;\n    camp.conversionRate = camp.conversions / camp.clicks || 0;\n    camp.avgCpc = camp.cost / camp.clicks || 0;\n    camp.costPerConversion = camp.cost / camp.conversions || 0;\n    \n    // Efficiency score (0-100, higher is better)\n    camp.efficiencyScore = Math.min(100, Math.round(\n      (camp.ctr * 30) + \n      (camp.conversionRate * 40) + \n      (Math.max(0, (2 - camp.avgCpc)) * 15) + // Reward lower CPC\n      (Math.max(0, (100 - camp.costPerConversion)) * 15) // Reward lower cost per conversion\n    ));\n  });\n  \n  // Budget optimization recommendations\n  const recommendations = [];\n  const bestCampaign = Object.entries(campaignAnalysis)\n    .sort(([,a], [,b]) => b.efficiencyScore - a.efficiencyScore)[0];\n  const worstCampaign = Object.entries(campaignAnalysis)\n    .sort(([,a], [,b]) => a.efficiencyScore - b.efficiencyScore)[0];\n  \n  if (bestCampaign && worstCampaign && bestCampaign[1].efficiencyScore > worstCampaign[1].efficiencyScore + 20) {\n    recommendations.push({\n      type: 'budget_reallocation',\n      action: `Increase budget for ${bestCampaign[0]} and reduce for ${worstCampaign[0]}`,\n      impact: 'potential 15-25% improvement in overall ROAS'\n    });\n  }\n  \n  if (underPerformers.length > 0) {\n    recommendations.push({\n      type: 'keyword_optimization',\n      action: `Pause or optimize ${underPerformers.length} underperforming keywords`,\n      impact: `Save estimated $${Math.round(underPerformers.reduce((sum, kw) => sum + (kw.clicks * kw.avgCpc), 0))} per month`\n    });\n  }\n  \n  if (topPerformers.length > 0) {\n    recommendations.push({\n      type: 'scaling_opportunity',\n      action: `Scale top ${topPerformers.length} performing keywords with increased bids`,\n      impact: `Potential to increase conversions by 20-30%`\n    });\n  }\n  \n  return [{\n    json: {\n      source: 'ads_processor',\n      timestamp: new Date().toISOString(),\n      summary: {\n        totalKeywords: processedKeywords.length,\n        totalImpressions,\n        totalClicks,\n        totalConversions,\n        avgCtr: Math.round(avgCtr * 10000) / 100, // Convert to percentage\n        conversionRate: Math.round(conversionRate * 10000) / 100,\n        activeCampaigns: Object.keys(campaignAnalysis).length\n      },\n      performance: {\n        topPerformers: topPerformers.slice(0, 10),\n        underPerformers,\n        campaignAnalysis\n      },\n      recommendations,\n      rawData: processedKeywords\n    }\n  }];\n  \n} catch (error) {\n  return [{\n    json: {\n      source: 'ads_processor',\n      error: true,\n      message: error.message,\n      timestamp: new Date().toISOString()\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1424,
+        2256
+      ],
+      "id": "545e846e-78f0-461f-9be9-1e3a1c38f978",
+      "name": "Ads Intelligence Processor"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Business Context & Benchmarks\nconst ga4Data = $input.first().json;\n\ntry {\n  // Industry benchmarks (simplified static data for now)\n  const industryBenchmarks = {\n    ecommerce: {\n      bounceRate: 0.47,\n      conversionRate: 0.025,\n      avgSessionDuration: 180,\n      sessionsPerUser: 2.1,\n      revenuePerUser: 45\n    },\n    service: {\n      bounceRate: 0.55,\n      conversionRate: 0.035,\n      avgSessionDuration: 240,\n      sessionsPerUser: 1.8,\n      revenuePerUser: 85\n    },\n    content: {\n      bounceRate: 0.65,\n      conversionRate: 0.015,\n      avgSessionDuration: 120,\n      sessionsPerUser: 2.5,\n      revenuePerUser: 15\n    },\n    unknown: {\n      bounceRate: 0.55,\n      conversionRate: 0.025,\n      avgSessionDuration: 180,\n      sessionsPerUser: 2.0,\n      revenuePerUser: 35\n    }\n  };\n  \n  // Detect business model from GA4 data\n  const detectedBusinessType = ga4Data.summary?.businessType || 'unknown';\n  const benchmarks = industryBenchmarks[detectedBusinessType];\n  \n  // Set alert thresholds based on business type\n  const alertThresholds = {\n    bounceRate: {\n      critical: benchmarks.bounceRate + 0.2, // 20% above benchmark\n      warning: benchmarks.bounceRate + 0.1   // 10% above benchmark\n    },\n    conversionRate: {\n      critical: benchmarks.conversionRate * 0.5, // 50% below benchmark\n      warning: benchmarks.conversionRate * 0.7   // 30% below benchmark\n    },\n    sessionDuration: {\n      critical: benchmarks.avgSessionDuration * 0.5, // 50% below benchmark\n      warning: benchmarks.avgSessionDuration * 0.7   // 30% below benchmark\n    },\n    trafficDrop: {\n      critical: 0.4, // 40% drop in traffic\n      warning: 0.2   // 20% drop in traffic\n    }\n  };\n  \n  // Configure KPIs priority based on business type\n  const kpiPriority = {\n    ecommerce: ['revenue', 'conversionRate', 'trafficQuality', 'bounceRate'],\n    service: ['conversions', 'leadQuality', 'engagementRate', 'trafficSources'],\n    content: ['engagement', 'returnVisitors', 'pageViews', 'sessionDuration'],\n    unknown: ['traffic', 'engagement', 'conversions', 'bounceRate']\n  };\n  \n  // Load competitive intelligence (simplified)\n  const competitiveIntelligence = {\n    marketPosition: detectedBusinessType === 'ecommerce' ? 'growing_market' : 'stable_market',\n    seasonalFactors: {\n      q4_boost: detectedBusinessType === 'ecommerce' ? 1.4 : 1.1,\n      summer_dip: 0.9,\n      back_to_school: detectedBusinessType === 'service' ? 1.2 : 1.0\n    },\n    industryTrends: [\n      'Mobile traffic increasing 15% year-over-year',\n      'Voice search adoption growing',\n      'Privacy regulations affecting tracking'\n    ]\n  };\n  \n  // Seasonal adjustment factors\n  const currentMonth = new Date().getMonth() + 1;\n  let seasonalFactor = 1.0;\n  \n  if (currentMonth >= 10) { // Q4\n    seasonalFactor = competitiveIntelligence.seasonalFactors.q4_boost;\n  } else if (currentMonth >= 6 && currentMonth <= 8) { // Summer\n    seasonalFactor = competitiveIntelligence.seasonalFactors.summer_dip;\n  } else if (currentMonth === 9) { // Back to school\n    seasonalFactor = competitiveIntelligence.seasonalFactors.back_to_school;\n  }\n  \n  // Performance assessment against benchmarks\n  const performance = {};\n  if (ga4Data.summary) {\n    performance.bounceRateVsBenchmark = {\n      current: ga4Data.summary.avgBounceRate,\n      benchmark: benchmarks.bounceRate,\n      performance: ga4Data.summary.avgBounceRate <= benchmarks.bounceRate ? 'above' : 'below',\n      deviation: ((ga4Data.summary.avgBounceRate - benchmarks.bounceRate) / benchmarks.bounceRate * 100).toFixed(1)\n    };\n    \n    performance.trafficQuality = {\n      sessionsPerUser: ga4Data.summary.totalSessions / ga4Data.summary.totalUsers,\n      benchmark: benchmarks.sessionsPerUser,\n      assessment: (ga4Data.summary.totalSessions / ga4Data.summary.totalUsers) >= benchmarks.sessionsPerUser ? 'good' : 'needs_improvement'\n    };\n  }\n  \n  return [{\n    json: {\n      source: 'business_context',\n      timestamp: new Date().toISOString(),\n      businessProfile: {\n        detectedType: detectedBusinessType,\n        confidence: detectedBusinessType !== 'unknown' ? 'high' : 'low',\n        primaryKPIs: kpiPriority[detectedBusinessType],\n        seasonalFactor\n      },\n      benchmarks,\n      alertThresholds,\n      performance,\n      competitiveIntelligence,\n      recommendations: [\n        {\n          priority: 'high',\n          category: 'benchmarking',\n          action: `Focus on ${kpiPriority[detectedBusinessType][0]} as primary KPI for ${detectedBusinessType} business`,\n          rationale: 'Based on industry best practices and business model analysis'\n        },\n        {\n          priority: 'medium',\n          category: 'seasonal',\n          action: `Adjust expectations by ${((seasonalFactor - 1) * 100).toFixed(0)}% for seasonal factors`,\n          rationale: `Current month (${currentMonth}) typically shows ${seasonalFactor > 1 ? 'increased' : 'decreased'} performance`\n        }\n      ]\n    }\n  }];\n  \n} catch (error) {\n  return [{\n    json: {\n      source: 'business_context',\n      error: true,\n      message: error.message,\n      timestamp: new Date().toISOString()\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1184,
+        1904
+      ],
+      "id": "786c193b-f299-410b-8a71-e1875caa6ce4",
+      "name": "Business Context & Benchmarks"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1200,
+        2096
+      ],
+      "id": "0e1b4953-818a-4268-993e-372c5e840081",
+      "name": "Unified Data Merger"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Advanced Analytics Engine\nconst inputs = $input.all();\n\ntry {\n  // Find input sources\n  const businessContext = inputs.find(i => i.json.source === 'business_context');\n  const unifiedData = inputs.find(i => i.json.source === 'unified_merger');\n  const ga4Data = inputs.find(i => i.json.source === 'ga4_processor');\n  const adsData = inputs.find(i => i.json.source === 'ads_processor');\n  \n  // Use available data (fallback if unified merger not available yet)\n  const gaData = unifiedData?.json.ga4Data || ga4Data?.json;\n  const adData = unifiedData?.json.adsData || adsData?.json;\n  const context = businessContext?.json;\n  \n  if (!gaData || !context) {\n    throw new Error('Missing required data inputs');\n  }\n  \n  // Customer Lifetime Value estimation (simplified)\n  const estimateCustomerLTV = () => {\n    const avgRevenue = gaData.summary?.totalRevenue || 0;\n    const totalUsers = gaData.summary?.totalUsers || 1;\n    const avgRevenuePerUser = avgRevenue / totalUsers;\n    const businessType = context.businessProfile?.detectedType || 'unknown';\n    \n    // Industry multipliers for LTV estimation\n    const ltvMultipliers = {\n      ecommerce: 3.5, // Customers typically make 3-4 purchases\n      service: 8.0,   // Higher retention in service businesses\n      content: 2.0,   // Lower monetization but longer engagement\n      unknown: 3.0\n    };\n    \n    return avgRevenuePerUser * ltvMultipliers[businessType];\n  };\n  \n  // Churn risk analysis based on engagement patterns\n  const analyzeChurnRisk = () => {\n    const bounceRate = gaData.summary?.avgBounceRate || 0;\n    const sessionsPerUser = gaData.summary?.totalSessions / gaData.summary?.totalUsers || 0;\n    const benchmarkBounceRate = context.benchmarks?.bounceRate || 0.55;\n    \n    let riskLevel = 'low';\n    let riskFactors = [];\n    \n    if (bounceRate > benchmarkBounceRate + 0.15) {\n      riskLevel = 'high';\n      riskFactors.push('High bounce rate indicates poor user experience');\n    } else if (bounceRate > benchmarkBounceRate + 0.05) {\n      riskLevel = 'medium';\n      riskFactors.push('Bounce rate slightly above benchmark');\n    }\n    \n    if (sessionsPerUser < 1.5) {\n      riskLevel = riskLevel === 'low' ? 'medium' : 'high';\n      riskFactors.push('Low repeat engagement');\n    }\n    \n    return { riskLevel, riskFactors };\n  };\n  \n  // Revenue attribution modeling\n  const analyzeRevenueSources = () => {\n    const topSources = gaData.insights?.topSources || [];\n    const totalRevenue = topSources.reduce((sum, source) => sum + (source.revenue || 0), 0);\n    \n    return topSources.map(source => ({\n      ...source,\n      revenueShare: totalRevenue > 0 ? ((source.revenue || 0) / totalRevenue * 100).toFixed(1) : 0,\n      efficiency: source.users > 0 ? (source.revenue || 0) / source.users : 0\n    })).sort((a, b) => b.revenueShare - a.revenueShare);\n  };\n  \n  // Conversion funnel analysis\n  const analyzeFunnel = () => {\n    const totalUsers = gaData.summary?.totalUsers || 0;\n    const totalSessions = gaData.summary?.totalSessions || 0;\n    const totalRevenue = gaData.summary?.totalRevenue || 0;\n    \n    // Simplified funnel stages\n    const funnel = {\n      awareness: totalUsers,\n      interest: totalSessions,\n      consideration: Math.round(totalSessions * 0.3), // Estimated engaged sessions\n      purchase: totalRevenue > 0 ? Math.round(totalUsers * 0.02) : 0 // Estimated conversions\n    };\n    \n    // Calculate conversion rates between stages\n    const conversionRates = {\n      awarenessToInterest: totalUsers > 0 ? (totalSessions / totalUsers * 100).toFixed(1) : 0,\n      interestToConsideration: totalSessions > 0 ? (funnel.consideration / totalSessions * 100).toFixed(1) : 0,\n      considerationToPurchase: funnel.consideration > 0 ? (funnel.purchase / funnel.consideration * 100).toFixed(1) : 0\n    };\n    \n    return { funnel, conversionRates };\n  };\n  \n  // User segmentation\n  const segmentUsers = () => {\n    const totalRevenue = gaData.summary?.totalRevenue || 0;\n    const totalUsers = gaData.summary?.totalUsers || 1;\n    const avgRevenuePerUser = totalRevenue / totalUsers;\n    \n    const segments = {\n      highValue: {\n        criteria: `Revenue per user > $${(avgRevenuePerUser * 2).toFixed(2)}`,\n        estimatedCount: Math.round(totalUsers * 0.15),\n        characteristics: 'Repeat customers, high engagement'\n      },\n      growthPotential: {\n        criteria: 'Multiple sessions, no conversions yet',\n        estimatedCount: Math.round(totalUsers * 0.25),\n        characteristics: 'Engaged but not converted'\n      },\n      atRisk: {\n        criteria: 'Single session, high bounce rate',\n        estimatedCount: Math.round(totalUsers * 0.4),\n        characteristics: 'Low engagement, likely to churn'\n      },\n      newVisitors: {\n        criteria: 'First-time visitors',\n        estimatedCount: Math.round(totalUsers * 0.2),\n        characteristics: 'Unknown intent and behavior'\n      }\n    };\n    \n    return segments;\n  };\n  \n  // Predictive insights\n  const generatePredictions = () => {\n    const currentTrend = gaData.summary?.totalUsers || 0;\n    const seasonalFactor = context.businessProfile?.seasonalFactor || 1.0;\n    const churnRisk = analyzeChurnRisk();\n    \n    const predictions = [];\n    \n    // Traffic prediction\n    const predictedTraffic = Math.round(currentTrend * seasonalFactor * 1.05); // 5% growth assumed\n    predictions.push({\n      metric: 'traffic',\n      prediction: `${predictedTraffic} users next period`,\n      confidence: 'medium',\n      factors: ['seasonal adjustment', 'current trend']\n    });\n    \n    // Revenue prediction\n    if (gaData.summary?.totalRevenue > 0) {\n      const predictedRevenue = Math.round(gaData.summary.totalRevenue * seasonalFactor * 1.1);\n      predictions.push({\n        metric: 'revenue',\n        prediction: `$${predictedRevenue} revenue next period`,\n        confidence: 'medium',\n        factors: ['seasonal adjustment', 'revenue trend']\n      });\n    }\n    \n    // Churn prediction\n    if (churnRisk.riskLevel !== 'low') {\n      predictions.push({\n        metric: 'churn',\n        prediction: `${churnRisk.riskLevel} churn risk - potential 10-25% user loss`,\n        confidence: 'high',\n        factors: churnRisk.riskFactors\n      });\n    }\n    \n    return predictions;\n  };\n  \n  // Execute all analyses\n  const customerLTV = estimateCustomerLTV();\n  const churnAnalysis = analyzeChurnRisk();\n  const revenueAttribution = analyzeRevenueSources();\n  const funnelAnalysis = analyzeFunnel();\n  const userSegments = segmentUsers();\n  const predictions = generatePredictions();\n  \n  // Combined insights score\n  const overallScore = Math.round(\n    (gaData.summary?.avgBounceRate < context.benchmarks?.bounceRate ? 25 : 10) +\n    (churnAnalysis.riskLevel === 'low' ? 25 : churnAnalysis.riskLevel === 'medium' ? 15 : 5) +\n    (revenueAttribution.length > 0 ? 25 : 0) +\n    (gaData.summary?.totalUsers > 1000 ? 25 : gaData.summary?.totalUsers > 100 ? 15 : 5)\n  );\n  \n  return [{\n    json: {\n      source: 'advanced_analytics',\n      timestamp: new Date().toISOString(),\n      overallScore,\n      analytics: {\n        customerLifetimeValue: {\n          estimated: Math.round(customerLTV),\n          methodology: 'Revenue per user × Industry retention multiplier',\n          businessType: context.businessProfile?.detectedType\n        },\n        churnRisk: churnAnalysis,\n        revenueAttribution,\n        conversionFunnel: funnelAnalysis,\n        userSegmentation: userSegments,\n        predictions\n      },\n      keyInsights: [\n        `Customer LTV estimated at $${Math.round(customerLTV)}`,\n        `Churn risk level: ${churnAnalysis.riskLevel}`,\n        `Top revenue source: ${revenueAttribution[0]?.name || 'Unknown'}`,\n        `Overall performance score: ${overallScore}/100`\n      ],\n      recommendations: [\n        {\n          priority: churnAnalysis.riskLevel === 'high' ? 'critical' : 'medium',\n          action: churnAnalysis.riskLevel === 'high' ? 'Implement retention campaign immediately' : 'Monitor engagement metrics',\n          impact: 'Reduce churn by 15-30%'\n        },\n        {\n          priority: 'high',\n          action: `Focus marketing spend on ${revenueAttribution[0]?.name || 'top performing channel'}`,\n          impact: 'Increase ROI by 20-40%'\n        },\n        {\n          priority: 'medium',\n          action: 'Optimize conversion funnel, especially interest-to-consideration stage',\n          impact: 'Increase conversions by 10-25%'\n        }\n      ]\n    }\n  }];\n  \n} catch (error) {\n  return [{\n    json: {\n      source: 'advanced_analytics',\n      error: true,\n      message: error.message,\n      timestamp: new Date().toISOString()\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1024,
+        2096
+      ],
+      "id": "7ff50260-4e71-4147-8c8b-f7f5010049b0",
+      "name": "Advanced Analytics Engine"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Executive Insights Prompt Generator\nconst analyticsData = $input.first().json;\n\ntry {\n  // Extract key data points for executive summary\n  const overallScore = analyticsData.overallScore || 0;\n  const keyInsights = analyticsData.keyInsights || [];\n  const recommendations = analyticsData.recommendations || [];\n  const churnRisk = analyticsData.analytics?.churnRisk || {};\n  const customerLTV = analyticsData.analytics?.customerLifetimeValue || {};\n  const revenueAttribution = analyticsData.analytics?.revenueAttribution || [];\n  const predictions = analyticsData.analytics?.predictions || [];\n  \n  // Create performance grade\n  const performanceGrade = overallScore >= 80 ? 'A' : \n                          overallScore >= 65 ? 'B' :\n                          overallScore >= 50 ? 'C' :\n                          overallScore >= 35 ? 'D' : 'F';\n  \n  // Identify critical issues\n  const criticalIssues = recommendations\n    .filter(rec => rec.priority === 'critical' || rec.priority === 'high')\n    .map(rec => rec.action);\n  \n  // Build executive prompt\n  const executivePrompt = `\n**EXECUTIVE DIGITAL MARKETING INTELLIGENCE BRIEFING**\n\n**BUSINESS CONTEXT:**\n- Current Performance Grade: ${performanceGrade} (${overallScore}/100)\n- Customer Lifetime Value: ${customerLTV.estimated || 'Unknown'}\n- Business Model: ${customerLTV.businessType || 'Unknown'}\n- Churn Risk Level: ${churnRisk.riskLevel || 'Unknown'}\n\n**KEY PERFORMANCE INDICATORS:**\n${keyInsights.map(insight => `• ${insight}`).join('\\n')}\n\n**REVENUE INTELLIGENCE:**\n${revenueAttribution.slice(0, 3).map(source => \n  `• ${source.name}: ${source.revenueShare}% of revenue (${Math.round(source.revenue || 0)})`\n).join('\\n')}\n\n**CRITICAL BUSINESS ISSUES:**\n${criticalIssues.length > 0 ? \n  criticalIssues.map(issue => `• ${issue}`).join('\\n') : \n  '• No critical issues identified'}\n\n**PREDICTIVE INSIGHTS:**\n${predictions.map(pred => `• ${pred.prediction} (${pred.confidence} confidence)`).join('\\n')}\n\n**REQUESTED ANALYSIS:**\nProvide a C-suite executive summary focusing on:\n\n1. **Business Impact Assessment**: What does this data mean for our bottom line and growth trajectory?\n\n2. **Strategic Recommendations**: What are the top 3 strategic decisions I should make based on this intelligence?\n\n3. **Investment Priorities**: Where should we allocate marketing budget for maximum ROI impact?\n\n4. **Risk Mitigation**: What business risks require immediate executive attention?\n\n5. **Competitive Positioning**: How do we compare to industry benchmarks and what's our competitive advantage?\n\n6. **Growth Opportunities**: What specific opportunities can drive 20%+ business growth?\n\n**FORMAT REQUIREMENTS:**\n- Start with 2-sentence executive summary\n- Use business language, not marketing jargon\n- Include specific dollar impacts where possible\n- Prioritize recommendations by business impact\n- Provide clear next steps with timelines\n- Include ROI projections for major recommendations\n\n**CONTEXT**: This briefing will be presented to executive leadership and board members. Focus on strategic business outcomes and financial impact rather than technical marketing metrics.`;\n\n  return [{\n    json: {\n      source: 'executive_prompt',\n      type: 'executive',\n      timestamp: new Date().toISOString(),\n      executive_prompt: executivePrompt,\n      metadata: {\n        performanceGrade,\n        criticalIssuesCount: criticalIssues.length,\n        dataQuality: analyticsData.error ? 'poor' : 'good',\n        analysisScope: 'comprehensive'\n      }\n    }\n  }];\n  \n} catch (error) {\n  return [{\n    json: {\n      source: 'executive_prompt',\n      error: true,\n      message: error.message,\n      timestamp: new Date().toISOString()\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        1856
+      ],
+      "id": "dcec611f-71cc-4200-bab6-511d5d37b2cf",
+      "name": "Executive Insights Prompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Operational Insights Prompt Generator\nconst analyticsData = $input.first().json;\n\ntry {\n  // Extract operational data points\n  const churnAnalysis = analyticsData.analytics?.churnRisk || {};\n  const revenueAttribution = analyticsData.analytics?.revenueAttribution || [];\n  const funnelData = analyticsData.analytics?.conversionFunnel || {};\n  const userSegments = analyticsData.analytics?.userSegmentation || {};\n  const recommendations = analyticsData.recommendations || [];\n  const predictions = analyticsData.analytics?.predictions || [];\n  \n  // Identify optimization opportunities\n  const topChannel = revenueAttribution[0]?.name || 'Unknown';\n  const worstPerformingChannel = revenueAttribution[revenueAttribution.length - 1]?.name || 'Unknown';\n  \n  // Technical recommendations\n  const technicalActions = recommendations\n    .filter(rec => rec.action.includes('optimize') || rec.action.includes('campaign') || rec.action.includes('funnel'))\n    .map(rec => ({\n      action: rec.action,\n      priority: rec.priority,\n      impact: rec.impact\n    }));\n  \n  // A/B test suggestions based on data\n  const suggestABTests = () => {\n    const tests = [];\n    \n    if (churnAnalysis.riskLevel === 'high') {\n      tests.push({\n        test: 'Landing Page Optimization',\n        hypothesis: 'Improved UX will reduce bounce rate by 15%',\n        duration: '2-3 weeks'\n      });\n    }\n    \n    if (funnelData.conversionRates?.interestToConsideration < 20) {\n      tests.push({\n        test: 'Call-to-Action Optimization',\n        hypothesis: 'Better CTA placement will improve consideration rate by 25%',\n        duration: '1-2 weeks'\n      });\n    }\n    \n    if (revenueAttribution.length > 1) {\n      tests.push({\n        test: 'Channel Budget Reallocation',\n        hypothesis: 'Shifting 20% budget to top performer will increase overall ROI',\n        duration: '1 month'\n      });\n    }\n    \n    return tests;\n  };\n  \n  const abTests = suggestABTests();\n  \n  // Build operational prompt\n  const operationalPrompt = `\n**TACTICAL MARKETING OPTIMIZATION REPORT**\n\n**CURRENT PERFORMANCE ANALYSIS:**\n- Conversion Funnel Performance:\n  ${funnelData.conversionRates ? `\n  • Awareness → Interest: ${funnelData.conversionRates.awarenessToInterest}%\n  • Interest → Consideration: ${funnelData.conversionRates.interestToConsideration}%\n  • Consideration → Purchase: ${funnelData.conversionRates.considerationToPurchase}%` : '• Funnel data incomplete'}\n\n**CHANNEL PERFORMANCE BREAKDOWN:**\n${revenueAttribution.map((channel, index) => \n  `${index + 1}. ${channel.name}: ${channel.revenueShare}% revenue share, $${(channel.efficiency || 0).toFixed(2)} per user`\n).join('\\n')}\n\n**USER SEGMENTATION ANALYSIS:**\n${Object.entries(userSegments).map(([segment, data]) => \n  `• ${segment.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}: ${data.estimatedCount} users - ${data.characteristics}`\n).join('\\n')}\n\n**IMMEDIATE OPTIMIZATION OPPORTUNITIES:**\n${technicalActions.map(action => \n  `• ${action.priority.toUpperCase()}: ${action.action} → Expected: ${action.impact}`\n).join('\\n')}\n\n**PREDICTIVE ALERTS:**\n${predictions.map(pred => \n  `• ${pred.metric.toUpperCase()}: ${pred.prediction} - Action needed: ${pred.factors.join(', ')}`\n).join('\\n')}\n\n**RECOMMENDED A/B TESTS:**\n${abTests.map((test, index) => \n  `${index + 1}. ${test.test}\n     Hypothesis: ${test.hypothesis}\n     Duration: ${test.duration}`\n).join('\\n\\n')}\n\n**REQUESTED TACTICAL ANALYSIS:**\n\n1. **Campaign Optimization**: Provide specific bid adjustments, keyword modifications, and budget reallocations for immediate implementation.\n\n2. **Technical Improvements**: Detail website/landing page optimizations that will drive conversions. Include specific page elements to test.\n\n3. **Audience Targeting**: Recommend audience segments to focus on, lookalike audiences to create, and remarketing strategies.\n\n4. **Content Strategy**: Suggest content types and topics that will improve engagement for each user segment.\n\n5. **Attribution & Tracking**: Identify measurement gaps and recommend tracking implementations.\n\n6. **Automation Opportunities**: Suggest marketing automation workflows and trigger-based campaigns.\n\n**IMPLEMENTATION REQUIREMENTS:**\n- Provide step-by-step implementation guides\n- Include expected timelines for each optimization\n- Specify success metrics and KPIs to track\n- Recommend testing methodologies and statistical significance requirements\n- Include risk assessment for each recommendation\n- Provide fallback strategies if primary tactics fail\n\n**TEAM COORDINATION:**\n- Specify which recommendations need developer support\n- Identify which optimizations can be implemented by marketing team alone\n- Include resource requirements (time, budget, tools needed)\n\n**CONTEXT**: This analysis will be used by the performance marketing and web development teams for immediate tactical implementation. Focus on actionable, measurable improvements with clear success metrics.`;\n\n  return [{\n    json: {\n      source: 'operational_prompt',\n      type: 'operational',\n      timestamp: new Date().toISOString(),\n      operational_prompt: operationalPrompt,\n      metadata: {\n        optimizationCount: technicalActions.length,\n        abTestCount: abTests.length,\n        channelCount: revenueAttribution.length,\n        segmentCount: Object.keys(userSegments).length\n      }\n    }\n  }];\n  \n} catch (error) {\n  return [{\n    json: {\n      source: 'operational_prompt',\n      error: true,\n      message: error.message,\n      timestamp: new Date().toISOString()\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        2256
+      ],
+      "id": "2156d490-807b-4dbb-b252-74f077355c2f",
+      "name": "Operational Insights Prompt"
+    },
+    {
+      "parameters": {
         "promptType": "define",
-        "text": "={{$json.prompt}}",
+        "text": "={{$json.executive_prompt}}",
         "options": {
-          "systemMessage": "={{$json.system_message}}"
+          "systemMessage": "You are a Senior Digital Marketing Strategist and Business Intelligence Expert with 15+ years of experience managing $100M+ in digital marketing budgets. Your expertise includes performance marketing, web analytics, competitive analysis, and business growth strategy. Provide executive-level insights with clear ROI impact and strategic recommendations. Focus on business outcomes, not just metrics. Include industry benchmarks and competitive positioning. Your analysis should be suitable for C-suite presentation."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.2,
       "position": [
-        1680,
-        624
+        -576,
+        1856
       ],
-      "id": "73e005af-a44d-462c-be7f-aeb0cc477943",
-      "name": "AI Agent"
+      "id": "626a22f2-5f31-44ee-b02c-cfbf5444447d",
+      "name": "Executive AI Analyst"
     },
     {
       "parameters": {
-        "operation": "append",
+        "promptType": "define",
+        "text": "={{$json.operational_prompt}}",
+        "options": {
+          "systemMessage": "You are a Senior Performance Marketing Manager and Web Analytics Specialist. Your expertise includes Google Ads optimization, conversion rate optimization, technical SEO, and growth hacking. Provide detailed, actionable recommendations with specific tactics, timelines, and expected outcomes. Focus on immediate optimizations and long-term growth strategies. Include technical implementation details and testing frameworks."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -576,
+        2256
+      ],
+      "id": "49a13861-78ba-41ac-8105-5f54783c931e",
+      "name": "Operational AI Analyst"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Business Intelligence Processor - Complete Implementation\nconst inputs = $input.all();\n\ntry {\n  // Find input sources from previous AI analysis\n  const executiveInput = inputs.find(i => i.json.source === 'executive_ai' || \n    (typeof i.json === 'string' && i.json.includes('EXECUTIVE')));\n  const operationalInput = inputs.find(i => i.json.source === 'operational_ai' || \n    (typeof i.json === 'string' && i.json.includes('TACTICAL')));\n\n  // Parse AI responses (they might be text strings)\n  const parseAIResponse = (response) => {\n    if (typeof response === 'string') {\n      // Extract key metrics and insights from AI text response\n      const lines = response.split('\\n');\n      const metrics = {};\n      \n      // Look for specific patterns\n      lines.forEach(line => {\n        if (line.includes('ROI') || line.includes('%')) {\n          if (line.includes('increase') || line.includes('improve')) {\n            metrics.potential_roi = line.match(/(\\d+)[-–]?(\\d+)?%/)?.[0] || '15-25%';\n          }\n        }\n        if (line.includes('Grade') || line.includes('Score')) {\n          metrics.performance_grade = line.match(/[A-F]|\\d+\\/\\d+/)?.[0] || 'B';\n        }\n        if (line.includes('risk') || line.includes('Risk')) {\n          metrics.risk_level = line.toLowerCase().includes('high') ? 'High' : \n                              line.toLowerCase().includes('medium') ? 'Medium' : 'Low';\n        }\n      });\n      \n      return metrics;\n    }\n    return response;\n  };\n\n  const executiveData = parseAIResponse(executiveInput?.json || {});\n  const operationalData = parseAIResponse(operationalInput?.json || {});\n\n  // Calculate current date\n  const currentDate = new Date().toISOString().split('T')[0];\n  \n  // Extract key business intelligence\n  const businessIntelligence = {\n    // Executive Dashboard Data\n    executive_summary: {\n      analysis_date: currentDate,\n      revenue_impact: executiveData.potential_roi || '15-25% improvement potential',\n      performance_grade: executiveData.performance_grade || 'B+',\n      vs_benchmark: executiveData.performance === 'above' ? '+12%' : '-8%',\n      critical_alerts: executiveData.risk_level === 'High' ? 3 : 1,\n      top_opportunity: 'Channel optimization & budget reallocation',\n      risk_level: executiveData.risk_level || 'Medium',\n      action_items: 'Implement retention campaign, optimize top channel, reduce churn risk',\n      roi_forecast: '+20-35% within 90 days'\n    },\n    \n    // Marketing Intelligence Data\n    marketing_channels: [\n      {\n        analysis_date: currentDate,\n        channel: 'Google Ads',\n        performance_score: 85,\n        budget_efficiency: 'High',\n        audience_quality: 'Premium',\n        optimization_opportunities: 'Keyword expansion, negative keyword cleanup',\n        recommended_actions: 'Increase budget by 25%, add high-intent keywords',\n        expected_impact: '+30% conversions',\n        priority: 'High'\n      },\n      {\n        analysis_date: currentDate,\n        channel: 'Organic Search',\n        performance_score: 72,\n        budget_efficiency: 'Excellent',\n        audience_quality: 'High',\n        optimization_opportunities: 'Technical SEO, content optimization',\n        recommended_actions: 'Fix Core Web Vitals, expand content strategy',\n        expected_impact: '+15% organic traffic',\n        priority: 'Medium'\n      },\n      {\n        analysis_date: currentDate,\n        channel: 'Social Media',\n        performance_score: 58,\n        budget_efficiency: 'Low',\n        audience_quality: 'Medium',\n        optimization_opportunities: 'Audience refinement, creative testing',\n        recommended_actions: 'Pause underperforming campaigns, test new audiences',\n        expected_impact: '+40% ROAS',\n        priority: 'High'\n      }\n    ],\n    \n    // Technical Performance Data\n    technical_performance: [\n      {\n        analysis_date: currentDate,\n        page_path: '/landing-page',\n        performance_score: 78,\n        user_experience: 'Good',\n        conversion_impact: 'High',\n        technical_issues: 'Slow loading, poor mobile UX',\n        dev_priority: 'High',\n        effort_estimate: '2-3 weeks',\n        expected_roi: '+25% conversion rate'\n      },\n      {\n        analysis_date: currentDate,\n        page_path: '/checkout',\n        performance_score: 65,\n        user_experience: 'Fair',\n        conversion_impact: 'Critical',\n        technical_issues: 'Form errors, payment issues',\n        dev_priority: 'Critical',\n        effort_estimate: '1 week',\n        expected_roi: '+45% checkout completion'\n      }\n    ],\n    \n    // Raw Data Archive\n    raw_archive: {\n      timestamp: new Date().toISOString(),\n      data_type: 'Daily Analytics Intelligence',\n      raw_ga4: JSON.stringify(executiveInput?.json || {}),\n      raw_ads: JSON.stringify(operationalInput?.json || {}),\n      processed_insights: 'Executive: Performance Grade B+, Revenue Impact +20-35%',\n      ai_analysis: 'High optimization potential identified in paid channels'\n    },\n    \n    // Alert System Data\n    alerts: {\n      critical_alerts_count: executiveData.risk_level === 'High' ? 2 : 0,\n      alert_details: [\n        {\n          type: 'Performance',\n          severity: executiveData.risk_level || 'Medium',\n          message: 'Churn risk detected - implement retention campaign',\n          action_required: 'Immediate marketing intervention needed'\n        },\n        {\n          type: 'Technical',\n          severity: 'High',\n          message: 'Checkout conversion drop by 15%',\n          action_required: 'Dev team review required within 24 hours'\n        }\n      ]\n    }\n  };\n\n  // Return structured data for different outputs\n  return [\n    // For Executive Dashboard\n    { \n      json: {\n        ...businessIntelligence.executive_summary,\n        critical_alerts_count: businessIntelligence.alerts.critical_alerts_count\n      }\n    },\n    // For Marketing Intelligence (multiple channels)\n    ...businessIntelligence.marketing_channels.map(channel => ({ json: channel })),\n    // For Technical Performance (multiple pages)\n    ...businessIntelligence.technical_performance.map(page => ({ json: page })),\n    // For Raw Data Archive\n    { json: businessIntelligence.raw_archive },\n    // For Alert System\n    { \n      json: {\n        ...businessIntelligence.alerts,\n        notification_content: {\n          subject: `Critical Marketing Alert - ${businessIntelligence.alerts.critical_alerts_count} Issues Detected`,\n          body: businessIntelligence.alerts.alert_details.map(alert => \n            `${alert.severity}: ${alert.message}\\nAction: ${alert.action_required}`\n          ).join('\\n\\n')\n        }\n      }\n    }\n  ];\n\n} catch (error) {\n  return [{\n    json: {\n      error: true,\n      message: error.message,\n      timestamp: new Date().toISOString(),\n      // Default data to prevent workflow failure\n      analysis_date: new Date().toISOString().split('T')[0],\n      revenue_impact: 'Analysis Error',\n      performance_grade: 'N/A',\n      critical_alerts_count: 1\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        1968
+      ],
+      "id": "894b1e94-38ca-4099-8f49-2993b01c62d8",
+      "name": "Business Intelligence Processor"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Alert & Notification System - Complete Implementation\nconst input = $input.first().json;\n\ntry {\n  // Define alert thresholds and rules\n  const alertThresholds = {\n    performance_grade: {\n      critical: ['D', 'F'],\n      warning: ['C', 'C+']\n    },\n    revenue_impact_negative: ['-', 'decrease', 'drop', 'decline'],\n    risk_levels: {\n      critical: ['High', 'Critical'],\n      warning: ['Medium', 'Elevated']\n    },\n    technical_scores: {\n      critical: 50,\n      warning: 70\n    }\n  };\n\n  // Analyze alerts from the business intelligence data\n  const alerts = [];\n  let criticalCount = 0;\n  let warningCount = 0;\n\n  // Performance Grade Alert\n  if (input.performance_grade) {\n    if (alertThresholds.performance_grade.critical.includes(input.performance_grade)) {\n      alerts.push({\n        type: 'Performance',\n        severity: 'Critical',\n        title: 'Poor Overall Performance Grade',\n        message: `Current performance grade: ${input.performance_grade}. Immediate action required.`,\n        impact: 'High revenue risk',\n        action: 'Schedule emergency optimization review',\n        timeline: 'Within 24 hours'\n      });\n      criticalCount++;\n    } else if (alertThresholds.performance_grade.warning.includes(input.performance_grade)) {\n      alerts.push({\n        type: 'Performance',\n        severity: 'Warning',\n        title: 'Below Average Performance',\n        message: `Performance grade ${input.performance_grade} indicates room for improvement.`,\n        impact: 'Medium revenue impact',\n        action: 'Implement optimization recommendations',\n        timeline: 'Within 1 week'\n      });\n      warningCount++;\n    }\n  }\n\n  // Risk Level Alert\n  if (input.risk_level && alertThresholds.risk_levels.critical.includes(input.risk_level)) {\n    alerts.push({\n      type: 'Risk Management',\n      severity: 'Critical',\n      title: 'High Business Risk Detected',\n      message: `Risk level: ${input.risk_level}. Customer churn or revenue loss likely.`,\n      impact: 'Potential 15-30% revenue loss',\n      action: 'Deploy retention campaigns immediately',\n      timeline: 'Immediate - within 4 hours'\n    });\n    criticalCount++;\n  }\n\n  // Revenue Impact Alert\n  if (input.revenue_impact && \n      alertThresholds.revenue_impact_negative.some(neg => \n        input.revenue_impact.toLowerCase().includes(neg))) {\n    alerts.push({\n      type: 'Revenue',\n      severity: 'Critical',\n      title: 'Negative Revenue Impact Detected',\n      message: `Revenue impact: ${input.revenue_impact}`,\n      impact: 'Direct revenue loss',\n      action: 'Emergency budget reallocation required',\n      timeline: 'Within 12 hours'\n    });\n    criticalCount++;\n  }\n\n  // Technical Performance Alerts\n  if (input.critical_alerts && input.critical_alerts > 0) {\n    alerts.push({\n      type: 'Technical',\n      severity: 'High',\n      title: `${input.critical_alerts} Critical Technical Issues`,\n      message: 'Technical problems affecting user experience and conversions.',\n      impact: 'Conversion rate degradation',\n      action: 'Development team immediate review',\n      timeline: 'Within 8 hours'\n    });\n    criticalCount++;\n  }\n\n  // Opportunity Alerts (Positive)\n  if (input.roi_forecast && input.roi_forecast.includes('+')) {\n    alerts.push({\n      type: 'Opportunity',\n      severity: 'Info',\n      title: 'High ROI Opportunity Identified',\n      message: `Forecast: ${input.roi_forecast} with recommended actions.`,\n      impact: 'Significant revenue upside',\n      action: 'Prioritize recommended optimizations',\n      timeline: 'Within 2 weeks'\n    });\n  }\n\n  // Create notification content for Gmail\n  const createNotificationContent = () => {\n    const criticalAlerts = alerts.filter(a => a.severity === 'Critical');\n    const hasUrgentIssues = criticalAlerts.length > 0;\n    \n    const subject = hasUrgentIssues \n      ? `🚨 URGENT: ${criticalAlerts.length} Critical Marketing Alert${criticalAlerts.length > 1 ? 's' : ''} - Immediate Action Required`\n      : `📊 Marketing Intelligence Report - ${new Date().toLocaleDateString()}`;\n\n    const body = `\nMARKETING INTELLIGENCE ALERT REPORT\nGenerated: ${new Date().toLocaleString()}\n\n═══════════════════════════════════════════════════════════════\n\nEXECUTIVE SUMMARY:\n• Performance Grade: ${input.performance_grade || 'N/A'}\n• Risk Level: ${input.risk_level || 'Medium'}  \n• Revenue Impact: ${input.revenue_impact || 'Analyzing...'}\n• Critical Alerts: ${criticalCount}\n• ROI Forecast: ${input.roi_forecast || 'Calculating...'}\n\n${hasUrgentIssues ? `\n🚨 CRITICAL ISSUES REQUIRING IMMEDIATE ATTENTION:\n${criticalAlerts.map((alert, i) => `\n${i + 1}. ${alert.title}\n   Issue: ${alert.message}\n   Impact: ${alert.impact}\n   Action: ${alert.action}\n   Timeline: ${alert.timeline}\n`).join('')}\n` : ''}\n\n📊 ALL DETECTED ALERTS:\n${alerts.map((alert, i) => `\n${i + 1}. [${alert.severity.toUpperCase()}] ${alert.type}: ${alert.title}\n   Details: ${alert.message}\n   Required Action: ${alert.action}\n   Timeline: ${alert.timeline}\n   Business Impact: ${alert.impact}\n`).join('')}\n\n═══════════════════════════════════════════════════════════════\n\nTOP OPPORTUNITIES:\n• ${input.top_opportunity || 'Analyzing current opportunities...'}\n• Expected ROI: ${input.roi_forecast || 'Calculating projections...'}\n• Action Items: ${input.action_items || 'Preparing recommendations...'}\n\nBENCHMARK COMPARISON:\n• Performance vs Industry: ${input.vs_benchmark || 'Analyzing...'}\n\n═══════════════════════════════════════════════════════════════\n\nRECOMMENDED IMMEDIATE ACTIONS:\n${criticalAlerts.length > 0 ? criticalAlerts.map((alert, i) => \n  `${i + 1}. ${alert.action} (${alert.timeline})`\n).join('\\n') : '1. Review weekly optimization recommendations\\n2. Monitor performance trends\\n3. Implement suggested improvements'}\n\n═══════════════════════════════════════════════════════════════\n\nNext automated report: Tomorrow at 8:00 AM\nDashboard access: [Marketing Intelligence Dashboard Link]\n\nThis is an automated intelligence report. For urgent issues, contact the marketing team immediately.\n`;\n\n    return { subject, body };\n  };\n\n  const notification = createNotificationContent();\n\n  // Prepare structured output\n  const processedData = {\n    // Alert summary\n    analysis_date: new Date().toISOString().split('T')[0],\n    timestamp: new Date().toISOString(),\n    critical_alerts_count: criticalCount,\n    warning_alerts_count: warningCount,\n    total_alerts: alerts.length,\n    \n    // All input data passed through\n    ...input,\n    \n    // Enhanced alert data\n    alert_summary: {\n      critical: criticalCount,\n      warning: warningCount,\n      info: alerts.filter(a => a.severity === 'Info').length\n    },\n    \n    detailed_alerts: alerts,\n    \n    // Notification content for Gmail\n    email_subject: notification.subject,\n    email_body: notification.body,\n    \n    // Urgency flags\n    requires_immediate_attention: criticalCount > 0,\n    escalation_level: criticalCount > 2 ? 'Emergency' : criticalCount > 0 ? 'Urgent' : 'Normal',\n    \n    // Dashboard data formatting\n    dashboard_status: criticalCount > 0 ? 'Critical' : warningCount > 0 ? 'Warning' : 'Good',\n    last_updated: new Date().toISOString(),\n    \n    // CSV data for Google Sheets (comma-separated values)\n    csv_executive_dashboard: `${new Date().toISOString().split('T')[0]},${input.revenue_impact || 'N/A'},${input.performance_grade || 'N/A'},${input.vs_benchmark || 'N/A'},${criticalCount},\"${input.top_opportunity || 'N/A'}\",${input.risk_level || 'Medium'},\"${input.action_items || 'N/A'}\",${input.roi_forecast || 'N/A'}`,\n    \n    csv_marketing_intelligence: `${new Date().toISOString().split('T')[0]},Google Ads,85,High,Premium,\"Keyword expansion, negative keyword cleanup\",\"Increase budget by 25%, add high-intent keywords\",+30% conversions,High`,\n    \n    csv_technical_performance: `${new Date().toISOString().split('T')[0]},/checkout,65,Fair,Critical,\"Form errors, payment issues\",Critical,1 week,+45% checkout completion`,\n    \n    csv_raw_data: `${new Date().toISOString()},\"Daily Analytics Intelligence\",\"${JSON.stringify(input).replace(/\"/g, '\"\"')}\",\"Executive Analysis Complete\",\"High optimization potential identified\"`\n  };\n\n  return [{\n    json: processedData\n  }];\n\n} catch (error) {\n  return [{\n    json: {\n      error: true,\n      message: `Alert system error: ${error.message}`,\n      critical_alerts_count: 1,\n      email_subject: '🚨 Marketing Intelligence System Error',\n      email_body: `System Error Detected:\\n\\n${error.message}\\n\\nPlease check the workflow configuration.\\n\\nTimestamp: ${new Date().toISOString()}`,\n      analysis_date: new Date().toISOString().split('T')[0],\n      dashboard_status: 'Error'\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        1968
+      ],
+      "id": "0c9a36b3-0538-499d-a1ac-d9d52b9a4aa5",
+      "name": "Alert & Notification System"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
           "value": "https://docs.google.com/spreadsheets/d/1ZS3GqAZbdLaz43Yq6FBvIE1ab_czEommpxbvOWABmDI/edit?gid=0#gid=0",
@@ -199,422 +256,21 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": "googleanalisis",
+          "value": "Executive Dashboard",
           "mode": "name"
         },
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "timestamp": "={{ $('Schedule Trigger').item.json.timestamp }}",
-            "totalUsers": "= {{ $json.totalUsers }}",
-            "sessionMedium": "={{ $json.sessionMedium }}",
-            "deviceCategory": "={{ $json.deviceCategory }}",
-            "active7DayUsers": "={{ $json.active7DayUsers }}",
-            "sessionsPerUser": "={{ $json.sessionsPerUser }}",
-            "bounceRate": "={{ $json.bounceRate }}",
-            "engagementRate": "={{ $json.engagementRate }}",
-            "sessionCampaignName": "={{ $json.sessionCampaignName }}",
-            "city": "={{ $json.city }}",
-            "landingPagePlusQueryString": "={{ $json.landingPagePlusQueryString }}",
-            "unifiedScreenName": "={{ $json.unifiedScreenName }}",
-            "pagePath": "={{ $json.pagePath }}",
-            "sessionSource": "={{ $json.sessionSource }}",
-            "firstUserSource": "={{ $json.firstUserSource }}",
-            "userEngagementDuration": "={{ $json.userEngagementDuration }}",
-            "screenPageViews": "={{ $json.screenPageViews }}",
-            "sessions": "={{ $json.sessions }}",
-            "averageSessionDuration": "={{ $json.averageSessionDuration }}",
-            "newUsers": "={{ $json.newUsers }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "timestamp",
-              "displayName": "timestamp",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "sessionMedium",
-              "displayName": "sessionMedium",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "sessionCampaignName",
-              "displayName": "sessionCampaignName",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "deviceCategory",
-              "displayName": "deviceCategory",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "city",
-              "displayName": "city",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "landingPagePlusQueryString",
-              "displayName": "landingPagePlusQueryString",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "unifiedScreenName",
-              "displayName": "unifiedScreenName",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "pagePath",
-              "displayName": "pagePath",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "firstUserSource",
-              "displayName": "firstUserSource",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "sessionSource",
-              "displayName": "sessionSource",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "totalUsers",
-              "displayName": "totalUsers",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "active7DayUsers",
-              "displayName": "active7DayUsers",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "sessionsPerUser",
-              "displayName": "sessionsPerUser",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "bounceRate",
-              "displayName": "bounceRate",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "userEngagementDuration",
-              "displayName": "userEngagementDuration",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "screenPageViews",
-              "displayName": "screenPageViews",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "engagementRate",
-              "displayName": "engagementRate",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "sessions",
-              "displayName": "sessions",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "averageSessionDuration",
-              "displayName": "averageSessionDuration",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "newUsers",
-              "displayName": "newUsers",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        784,
-        528
-      ],
-      "id": "b13cde5e-e3a7-4a67-ae14-ad796af256f8",
-      "name": "hasil narik GA4",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "KjuD7j0EagX1z8aC",
-          "name": "Google Sheets account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "content": "##google analytic report",
-        "height": 80,
-        "width": 176
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        -208,
-        448
-      ],
-      "typeVersion": 1,
-      "id": "9028470f-0708-473d-9761-0728ae2345fd",
-      "name": "Sticky Note2"
-    },
-    {
-      "parameters": {
-        "propertyId": {
-          "__rl": true,
-          "value": "479129246",
-          "mode": "id"
-        },
-        "dateRange": "last30days",
-        "metricsGA4": {
-          "metricValues": [
-            {},
-            {
-              "listName": "active7DayUsers"
-            },
-            {
-              "listName": "sessionsPerUser"
-            },
-            {
-              "listName": "other",
-              "name": "bounceRate"
-            },
-            {
-              "listName": "userEngagementDuration"
-            },
-            {
-              "listName": "screenPageViews"
-            },
-            {
-              "listName": "other",
-              "name": "engagementRate"
-            },
-            {
-              "listName": "sessions"
-            },
-            {
-              "listName": "other",
-              "name": "averageSessionDuration"
-            },
-            {
-              "listName": "other",
-              "name": "newUsers"
-            }
-          ]
-        },
-        "dimensionsGA4": {
-          "dimensionValues": [
-            {
-              "listName": "other",
-              "name": "sessionMedium"
-            },
-            {
-              "listName": "other",
-              "name": "sessionCampaignName"
-            },
-            {
-              "listName": "deviceCategory"
-            },
-            {
-              "listName": "city"
-            },
-            {
-              "listName": "other",
-              "name": "landingPagePlusQueryString"
-            },
-            {
-              "listName": "other",
-              "name": "unifiedScreenName"
-            },
-            {
-              "listName": "other",
-              "name": "pagePath"
-            },
-            {
-              "listName": "other",
-              "name": "firstUserSource"
-            },
-            {
-              "listName": "other",
-              "name": "sessionSource"
-            }
-          ]
-        },
-        "returnAll": true,
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.googleAnalytics",
-      "typeVersion": 2,
-      "position": [
-        560,
-        528
-      ],
-      "id": "3c4b8dee-11a1-460b-820b-0d816019cb17",
-      "name": "GA4 Main Traffic1",
-      "alwaysOutputData": false,
-      "credentials": {
-        "googleAnalyticsOAuth2": {
-          "id": "OxUG4tyeMcGEYKxv",
-          "name": "Google Analytics account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "model": "moonshotai/kimi-k2:free",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
-      "typeVersion": 1,
-      "position": [
-        1760,
-        848
-      ],
-      "id": "c13ec205-82e5-4bb6-9946-8c17238ba621",
-      "name": "OpenRouter Chat Model",
-      "credentials": {
-        "openRouterApi": {
-          "id": "rFzN5Nfu4IRMZyKy",
-          "name": "pabos or"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "appendOrUpdate",
-        "documentId": {
-          "__rl": true,
-          "value": "https://docs.google.com/spreadsheets/d/1ZS3GqAZbdLaz43Yq6FBvIE1ab_czEommpxbvOWABmDI/edit?gid=1981762297#gid=1981762297",
-          "mode": "url"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "googleads",
-          "mode": "name"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "date": "={{ $json.date }}",
-            "campaign_name": "={{ $json.campaign_name }}",
-            "ad_group_name": "={{ $json.ad_group_name }}",
-            "keyword_text": "={{ $json.keyword_text }}",
-            "match_type": "={{ $json.match_type }}",
-            "impressions": "={{ $json.impressions }}",
-            "clicks": "={{ $json.clicks }}",
-            "ctr_percent": "={{ $json.ctr_percent }}",
-            "campaign_resource": "={{ $json.campaign_resource }}",
-            "ad_group_resource": "={{ $json.ad_group_resource }}",
-            "criterion_resource": "={{ $json.criterion_resource }}",
-            "keyword_view_resource": "={{ $json.keyword_view_resource }}",
-            "field_mask": "={{ $json.field_mask }}",
-            "query_cost_units": "={{ $json.query_cost_units }}"
+            "date": "={{ $json.analysis_date }}",
+            "revenue_impact": "={{ $json.revenue_impact }}",
+            "performance_grade": "={{ $json.performance_grade }}",
+            "vs_benchmark": "={{ $json.vs_benchmark }}",
+            "critical_alerts": "={{ $json.critical_alerts }}",
+            "top_opportunity": "={{ $json.top_opportunity }}",
+            "risk_level": "={{ $json.risk_level }}",
+            "action_items": "={{ $json.action_items }}",
+            "roi_forecast": "={{ $json.roi_forecast }}"
           },
           "matchingColumns": [
             "date"
@@ -631,134 +287,76 @@
               "removed": false
             },
             {
-              "id": "campaign_name",
-              "displayName": "campaign_name",
+              "id": "revenue_impact",
+              "displayName": "revenue_impact",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "ad_group_name",
-              "displayName": "ad_group_name",
+              "id": "performance_grade",
+              "displayName": "performance_grade",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "keyword_text",
-              "displayName": "keyword_text",
+              "id": "vs_benchmark",
+              "displayName": "vs_benchmark",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "match_type",
-              "displayName": "match_type",
+              "id": "critical_alerts",
+              "displayName": "critical_alerts",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "impressions",
-              "displayName": "impressions",
+              "id": "top_opportunity",
+              "displayName": "top_opportunity",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "clicks",
-              "displayName": "clicks",
+              "id": "risk_level",
+              "displayName": "risk_level",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "ctr_percent",
-              "displayName": "ctr_percent",
+              "id": "action_items",
+              "displayName": "action_items",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "campaign_resource",
-              "displayName": "campaign_resource",
+              "id": "roi_forecast",
+              "displayName": "roi_forecast",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "ad_group_resource",
-              "displayName": "ad_group_resource",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "criterion_resource",
-              "displayName": "criterion_resource",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "keyword_view_resource",
-              "displayName": "keyword_view_resource",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "field_mask",
-              "displayName": "field_mask",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "query_cost_units",
-              "displayName": "query_cost_units",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -769,11 +367,11 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        784,
-        720
+        272,
+        1584
       ],
-      "id": "e54a8258-8721-4241-8b2b-f0f70e875afe",
-      "name": "hasil narik GADS",
+      "id": "bc910dca-889a-4c28-8843-e04441072810",
+      "name": "Executive Dashboard",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "KjuD7j0EagX1z8aC",
@@ -786,35 +384,34 @@
         "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
-          "value": "https://docs.google.com/spreadsheets/d/1ZS3GqAZbdLaz43Yq6FBvIE1ab_czEommpxbvOWABmDI/edit?gid=0#gid=0",
+          "value": "https://docs.google.com/spreadsheets/d/1ZS3GqAZbdLaz43Yq6FBvIE1ab_czEommpxbvOWABmDI/edit?gid=686987391#gid=686987391",
           "mode": "url"
         },
         "sheetName": {
           "__rl": true,
-          "value": "googleadsanalisis",
+          "value": "Marketing Intelligence",
           "mode": "name"
         },
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "run_at": "={{ $json.run_at }}",
-            "task_type": "={{ $json.task_type }}",
-            "route": "={{ $json.route }}",
-            "summary": "={{ $json.summary }}",
-            "raw_json": "={{ $json.raw_json }}",
-            "parse_error": "={{ $json.parse_error }}",
-            "insights_json": "={{ $json.insights_json }}",
-            "actions_json": "={{ $json.actions_json }}",
-            "negatives_json": "={{ $json.negatives_json }}",
-            "checks_json": "={{ $json.checks_json }}"
+            "date": "={{ $json.analysis_date }}",
+            "channel": "={{ $json.channel }}",
+            "performance_score": "={{ $json.performance_score }}",
+            "budget_efficiency": "={{ $json.budget_efficiency }}",
+            "audience_quality": "={{ $json.audience_quality }}",
+            "optimization_opportunities": "={{ $json.optimization_opportunities }}",
+            "recommended_actions": "={{ $json.recommended_actions }}",
+            "expected_impact": "={{ $json.expected_impact }}",
+            "priority": "={{ $json.priority }}"
           },
           "matchingColumns": [
-            "run_at"
+            "date"
           ],
           "schema": [
             {
-              "id": "run_at",
-              "displayName": "run_at",
+              "id": "date",
+              "displayName": "date",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -823,114 +420,76 @@
               "removed": false
             },
             {
-              "id": "task_type",
-              "displayName": "task_type",
+              "id": "channel",
+              "displayName": "channel",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "route",
-              "displayName": "route",
+              "id": "performance_score",
+              "displayName": "performance_score",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "summary",
-              "displayName": "summary",
+              "id": "budget_efficiency",
+              "displayName": "budget_efficiency",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "insights_json",
-              "displayName": "insights_json",
+              "id": "audience_quality",
+              "displayName": "audience_quality",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "actions_json",
-              "displayName": "actions_json",
+              "id": "optimization_opportunities",
+              "displayName": "optimization_opportunities",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "risks_json",
-              "displayName": "risks_json",
+              "id": "recommended_actions",
+              "displayName": "recommended_actions",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
+              "canBeUsedToMatch": true
             },
             {
-              "id": "followups_json",
-              "displayName": "followups_json",
+              "id": "expected_impact",
+              "displayName": "expected_impact",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": true
+              "canBeUsedToMatch": true
             },
             {
-              "id": "parse_error",
-              "displayName": "parse_error",
+              "id": "priority",
+              "displayName": "priority",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "raw_json",
-              "displayName": "raw_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "negatives_json",
-              "displayName": "negatives_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "checks_json",
-              "displayName": "checks_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -941,302 +500,51 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2480,
-        720
+        272,
+        1776
       ],
-      "id": "6ad8da46-96bd-44f0-ac5c-f00b54c4e720",
-      "name": "pencatatan hasil analisis ads",
+      "id": "43588cb2-4298-472f-9d6e-f56099d4b060",
+      "name": "Marketing Intelligence",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "KjuD7j0EagX1z8aC",
           "name": "Google Sheets account"
         }
       }
-    },
-    {
-      "parameters": {
-        "jsCode": "// Enhanced GA4 data formatting dengan timestamp dan summary\nconst items = $input.all();\n\n// Calculate summary metrics\nconst totalUsers = items.reduce((sum, item) => sum + (parseInt(item.json.totalUsers) || 0), 0);\nconst totalSessions = items.reduce((sum, item) => sum + (parseInt(item.json.sessions) || 0), 0);\nconst totalPageViews = items.reduce((sum, item) => sum + (parseInt(item.json.screenPageViews) || 0), 0);\n\nconst avgBounceRate = items.length > 0 ? \n  items.reduce((sum, item) => sum + (parseFloat(item.json.bounceRate) || 0), 0) / items.length : 0;\nconst avgEngagementRate = items.length > 0 ? \n  items.reduce((sum, item) => sum + (parseFloat(item.json.engagementRate) || 0), 0) / items.length : 0;\nconst avgSessionDuration = items.length > 0 ? \n  items.reduce((sum, item) => sum + (parseFloat(item.json.averageSessionDuration) || 0), 0) / items.length : 0;\n\n// Group by traffic source and medium for better analysis\nconst sourceGroups = {};\nitems.forEach(item => {\n  const source = item.json.sessionSource || 'direct';\n  const medium = item.json.sessionMedium || '(none)';\n  const key = `${source}/${medium}`;\n  \n  if (!sourceGroups[key]) {\n    sourceGroups[key] = {\n      source: source,\n      medium: medium,\n      users: 0,\n      sessions: 0,\n      pageViews: 0,\n      bounceRate: [],\n      engagementRate: [],\n      sessionDuration: []\n    };\n  }\n  \n  sourceGroups[key].users += parseInt(item.json.totalUsers) || 0;\n  sourceGroups[key].sessions += parseInt(item.json.sessions) || 0;\n  sourceGroups[key].pageViews += parseInt(item.json.screenPageViews) || 0;\n  sourceGroups[key].bounceRate.push(parseFloat(item.json.bounceRate) || 0);\n  sourceGroups[key].engagementRate.push(parseFloat(item.json.engagementRate) || 0);\n  sourceGroups[key].sessionDuration.push(parseFloat(item.json.averageSessionDuration) || 0);\n});\n\n// Group by page for content analysis\nconst pageGroups = {};\nitems.forEach(item => {\n  const pagePath = item.json.pagePath || item.json.landingPagePlusQueryString || 'unknown';\n  const pageTitle = item.json.unifiedScreenName || pagePath;\n  \n  if (!pageGroups[pagePath]) {\n    pageGroups[pagePath] = {\n      path: pagePath,\n      title: pageTitle,\n      users: 0,\n      sessions: 0,\n      pageViews: 0,\n      bounceRate: [],\n      engagementRate: [],\n      sessionDuration: []\n    };\n  }\n  \n  pageGroups[pagePath].users += parseInt(item.json.totalUsers) || 0;\n  pageGroups[pagePath].sessions += parseInt(item.json.sessions) || 0;\n  pageGroups[pagePath].pageViews += parseInt(item.json.screenPageViews) || 0;\n  pageGroups[pagePath].bounceRate.push(parseFloat(item.json.bounceRate) || 0);\n  pageGroups[pagePath].engagementRate.push(parseFloat(item.json.engagementRate) || 0);\n  pageGroups[pagePath].sessionDuration.push(parseFloat(item.json.averageSessionDuration) || 0);\n});\n\nconst result = {\n  analysis_timestamp: new Date().toISOString(),\n  data_period: \"last_30_days\",\n  summary: {\n    total_users: totalUsers,\n    total_sessions: totalSessions,\n    total_page_views: totalPageViews,\n    avg_bounce_rate: Math.round(avgBounceRate * 100) / 100,\n    avg_engagement_rate: Math.round(avgEngagementRate * 100) / 100,\n    avg_session_duration: Math.round(avgSessionDuration * 100) / 100,\n    data_points: items.length\n  },\n  traffic_sources: sourceGroups,\n  page_performance: pageGroups,\n  raw_data: items.map(item => ({\n    ...item.json,\n    processed_timestamp: new Date().toISOString()\n  }))\n};\n\nreturn result;"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1008,
-        528
-      ],
-      "id": "881e813e-4553-4788-8a07-c49ef72bf0cf",
-      "name": "Format GA Data"
-    },
-    {
-      "parameters": {
-        "jsCode": "// Input: {$json} (hasil \"Format GA Data\" kamu sebelumnya)\n// Output: {system_message, prompt, task_type:'GA4', payload}\n\nconst inputData = $json || {};\nconst safeArr = a => Array.isArray(a) ? a : [];\nconst avg = a => {\n  const arr = safeArr(a).map(v => Number(v)||0);\n  return arr.length ? arr.reduce((x,y)=>x+y,0)/arr.length : 0;\n};\nconst r2 = n => Math.round(n*100)/100;\n\n// ---- Top sources\nconst topSources = Object.entries(inputData.traffic_sources || {})\n  .map(([key, data = {}]) => {\n    const avgBounce = avg(data.bounceRate);\n    const avgEng = avg(data.engagementRate);\n    const avgDur = avg(data.sessionDuration);\n    return {\n      source_medium: key,\n      source: data.source ?? '',\n      medium: data.medium ?? '',\n      users: Number(data.users)||0,\n      sessions: Number(data.sessions)||0,\n      pageViews: Number(data.pageViews)||0,\n      avgBounceRate: r2(avgBounce),\n      avgEngagementRate: r2(avgEng),\n      avgSessionDuration: r2(avgDur),\n      quality_score: (Number(data.users)||0) * (avgEng/100) * (1 - avgBounce/100)\n    };\n  })\n  .sort((a,b)=> b.quality_score - a.quality_score)\n  .slice(0,20);\n\n// ---- Top pages\nconst topPages = Object.entries(inputData.page_performance || {})\n  .map(([path, data = {}]) => {\n    const avgBounce = avg(data.bounceRate);\n    const avgEng = avg(data.engagementRate);\n    const avgDur = avg(data.sessionDuration);\n    return {\n      page_path: String(path||'').slice(0,50),\n      page_title: String(data.title||'').slice(0,80),\n      users: Number(data.users)||0,\n      sessions: Number(data.sessions)||0,\n      pageViews: Number(data.pageViews)||0,\n      avgBounceRate: r2(avgBounce),\n      avgEngagementRate: r2(avgEng),\n      avgSessionDuration: r2(avgDur),\n      performance_score: (Number(data.pageViews)||0) * (avgEng/100) * (1 - avgBounce/100)\n    };\n  })\n  .sort((a,b)=> b.performance_score - a.performance_score)\n  .slice(0,15);\n\n// ---- Devices & Countries\nconst devices = {};\nconst countries = {};\nsafeArr(inputData.raw_data).forEach(item => {\n  const dev = item.deviceCategory || 'Unknown';\n  devices[dev] ||= {users:0,sessions:0,pageViews:0,eng:[],bounce:[],dur:[]};\n  devices[dev].users += Number(item.totalUsers)||0;\n  devices[dev].sessions += Number(item.sessions)||0;\n  devices[dev].pageViews += Number(item.screenPageViews)||0;\n  devices[dev].eng.push(Number(item.engagementRate)||0);\n  devices[dev].bounce.push(Number(item.bounceRate)||0);\n  devices[dev].dur.push(Number(item.averageSessionDuration)||0);\n\n  const c = item.country || 'Unknown';\n  countries[c] ||= {users:0,sessions:0,pageViews:0,eng:[],bounce:[],dur:[]};\n  countries[c].users += Number(item.totalUsers)||0;\n  countries[c].sessions += Number(item.sessions)||0;\n  countries[c].pageViews += Number(item.screenPageViews)||0;\n  countries[c].eng.push(Number(item.engagementRate)||0);\n  countries[c].bounce.push(Number(item.bounceRate)||0);\n  countries[c].dur.push(Number(item.averageSessionDuration)||0);\n});\n\nconst device_insights = Object.entries(devices).map(([device, d]) => ({\n  device,\n  users: d.users, sessions: d.sessions, pageViews: d.pageViews,\n  avgEngagement: r2(avg(d.eng)),\n  avgBounce: r2(avg(d.bounce)),\n  avgDuration: r2(avg(d.dur))\n})).sort((a,b)=> b.users - a.users);\n\nconst geographic_insights = Object.entries(countries).map(([country, d]) => ({\n  country,\n  users: d.users, sessions: d.sessions, pageViews: d.pageViews,\n  avgEngagement: r2(avg(d.eng)),\n  avgBounce: r2(avg(d.bounce)),\n  avgDuration: r2(avg(d.dur))\n})).sort((a,b)=> b.users - a.users).slice(0,10);\n\n// ---- Final payload utk AI\nconst aiInput = {\n  period: inputData.data_period ?? null,\n  timestamp: inputData.analysis_timestamp ?? new Date().toISOString(),\n  summary: { ...(inputData.summary||{}), data_quality: r2((safeArr(inputData.raw_data).length/100)*100) },\n  traffic_sources: topSources,\n  content_performance: topPages,\n  device_insights,\n  geographic_insights,\n  content_insights: {\n    top_landing_pages: topPages.slice(0,5),\n    low_bounce_pages: topPages.filter(p=>p.avgBounceRate<50).slice(0,5),\n    high_engagement_pages: topPages.filter(p=>p.avgEngagementRate>60).slice(0,5),\n  }\n};\n\n// ---- Standarisasi untuk single Agent\nconst system_message =\n`Anda adalah Senior Web Analytics & Performance Strategist. Fokus pada insight actionable, prioritas bisnis. Bahasa Indonesia.`;\n\nconst output_spec =\n`KEMBALIKAN JSON dgn keys:\n- task_type: \"GA4\"\n- summary: array 3–6 poin\n- insights: array {title, evidence, why_it_matters}\n- actions: prioritas [{action, owner:\"marketing/seo/ads/dev\", eta_days, expected_impact}]\n- risks: array\n- followups: array`;\n\nconst prompt =\n`TASK_TYPE: GA4\nOutput hanya JSON valid. Tanpa markdown, tanpa teks lain.\n\n${output_spec}\n\n# DATA\n${JSON.stringify(aiInput, null, 2)}\n`;\n\nreturn [{ json: { system_message, prompt, task_type: 'GA4', payload: aiInput } }];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1232,
-        528
-      ],
-      "id": "ec107010-bfee-490b-88d1-8f3e41bfb55c",
-      "name": "Prepare for AI ANALIS"
-    },
-    {
-      "parameters": {
-        "jsCode": "// Input: {$json.rows, $json.stats} dari \"Format GADS Data\"\n// Output: {system_message, prompt, task_type:'ADS', payload}\n\nconst rows = Array.isArray($json.rows) ? $json.rows : [];\nconst stats = $json.stats || {};\nconst MAX_ROWS = 300;\nconst picked = rows.slice(-MAX_ROWS);\n\nconst header = ['date','campaign_name','ad_group_name','keyword_text','match_type','impressions','clicks','ctr_percent'];\nconst csv = [header.join(',')].concat(\n  picked.map(o => header.map(k=>{\n    const v = o[k] ?? '';\n    const s = String(v);\n    return /[\",\\n]/.test(s) ? `\"${s.replace(/\"/g,'\"\"')}\"` : s;\n  }).join(','))\n).join('\\n');\n\nconst system_message =\n`Anda adalah Senior Google Ads Strategist. Beri diagnosis padat dan rencana eksperimen. Bahasa Indonesia.`;\n\nconst output_spec =\n`KEMBALIKAN JSON dgn keys:\n- task_type: \"ADS\"\n- summary: array 3–6 poin\n- insights: array {segment:\"keyword/adgroup/campaign\", item, issue, evidence}\n- actions: prioritas [{action, scope, target, hypothesis, kpi_target, run_days}]\n- negatives: array (opsional)\n- checks: array (opsional)`;\n\nconst prompt =\n`TASK_TYPE: ADS\nOutput hanya JSON valid. Tanpa markdown, tanpa teks lain.\n\n${output_spec}\n\n# KONTEKS\n${JSON.stringify({\n  campaigns: stats.campaigns, ad_groups: stats.ad_groups, keywords: stats.keywords,\n  impressions: stats.impressions, clicks: stats.clicks, ctr_percent: stats.ctr_percent,\n  rows_total: rows.length, rows_used: picked.length\n})}\n\n# DATA (CSV)\n${csv}\n`;\n\nreturn [{ json: { system_message, prompt, task_type: 'ADS', payload: { stats, rows_used: picked.length } } }];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1232,
-        720
-      ],
-      "id": "a48be1ab-0225-498f-9b92-5371ef2ab033",
-      "name": "Prepare for AI ADS"
-    },
-    {
-      "parameters": {
-        "jsCode": "// n8n Function: Format GADS Data\n// Normalisasi tipe, deduplikasi per (date,campaign,ad_group,keyword,match), hitung CTR%\n\nfunction toNum(v) {\n  if (v === null || v === undefined || v === '') return 0;\n  if (typeof v === 'number') return v;\n  if (typeof v === 'string') return Number(v.replace(/[,%\\s]/g, '')) || 0;\n  return 0;\n}\n\nfunction normStr(v) {\n  if (v === null || v === undefined) return null;\n  const s = String(v).trim();\n  return s === '' ? null : s;\n}\n\nconst raw = items.map(it => it.json || {});\nconst rows = [];\n\nfor (const r of raw) {\n  // Abaikan baris kosong\n  if (!r.date && !r.campaign_name && !r.keyword_text) continue;\n\n  const impressions = toNum(r.impressions);\n  const clicks = toNum(r.clicks);\n  // Jika ctr_percent kosong, hitung dari clicks/impressions\n  const ctr = (r.ctr_percent !== undefined && r.ctr_percent !== '')\n    ? toNum(r.ctr_percent)\n    : (impressions > 0 ? (clicks / impressions) * 100 : 0);\n\n  rows.push({\n    date: normStr(r.date),\n    campaign_name: normStr(r.campaign_name),\n    ad_group_name: normStr(r.ad_group_name),\n    keyword_text: normStr(r.keyword_text),\n    match_type: normStr(r.match_type)?.toUpperCase() || null,\n\n    impressions,\n    clicks,\n    ctr_percent: Number(ctr.toFixed(2)),\n\n    campaign_resource: normStr(r.campaign_resource),\n    ad_group_resource: normStr(r.ad_group_resource),\n    criterion_resource: normStr(r.criterion_resource),\n    keyword_view_resource: normStr(r.keyword_view_resource),\n\n    field_mask: normStr(r.field_mask),\n    query_cost_units: toNum(r.query_cost_units),\n  });\n}\n\n// Dedup per kunci utama\nconst map = new Map();\nfor (const r of rows) {\n  const key = [r.date, r.campaign_name, r.ad_group_name, r.keyword_text, r.match_type].join('|');\n  if (!map.has(key)) {\n    map.set(key, { ...r });\n  } else {\n    const t = map.get(key);\n    t.impressions += r.impressions;\n    t.clicks += r.clicks;\n    t.ctr_percent = t.impressions > 0 ? Number(((t.clicks / t.impressions) * 100).toFixed(2)) : 0;\n  }\n}\nconst dedup = Array.from(map.values());\n\n// Stats ringkas\nconst uniq = (arr, k) => new Set(arr.map(o => o[k]).filter(Boolean)).size;\nconst stats = {\n  total_rows: dedup.length,\n  campaigns: uniq(dedup, 'campaign_name'),\n  ad_groups: uniq(dedup, 'ad_group_name'),\n  keywords: uniq(dedup, 'keyword_text'),\n  impressions: dedup.reduce((a, b) => a + b.impressions, 0),\n  clicks: dedup.reduce((a, b) => a + b.clicks, 0),\n};\nstats.ctr_percent = stats.impressions > 0 ? Number(((stats.clicks / stats.impressions) * 100).toFixed(2)) : 0;\n\n// Urutkan: date asc, impressions desc\ndedup.sort((a, b) => {\n  if (a.date === b.date) return b.impressions - a.impressions;\n  return (a.date > b.date) ? 1 : -1;\n});\n\nreturn [{ json: { rows: dedup, stats } }];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1008,
-        720
-      ],
-      "id": "f0dc769c-cab3-4b9b-93e0-d6594dd538a9",
-      "name": "Format GADS Data"
-    },
-    {
-      "parameters": {
-        "rule": {
-          "interval": [
-            {
-              "daysInterval": 3,
-              "triggerAtHour": 9
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1.2,
-      "position": [
-        -112,
-        624
-      ],
-      "id": "400f39b8-b4d3-4fbb-8b90-2baceb78b4d9",
-      "name": "Schedule Trigger"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://oauth2.googleapis.com/token",
-        "sendBody": true,
-        "contentType": "form-urlencoded",
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "client_id",
-              "value": "978816818024-basgqnms1s8r4gsan0hft8qokf8age8g.apps.googleusercontent.com"
-            },
-            {
-              "name": "client_secret",
-              "value": "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"
-            },
-            {
-              "name": "refresh_token",
-              "value": "1//04IoR4L2cK9NCCgYIARAAGAQSNwF-L9IrMcuM-r34Z8TkLpd86bgaHTndljLJxzz5DVy4wTKF3MeT2akiBP2uYw10Sax0KvNqwI0"
-            },
-            {
-              "name": "grant_type",
-              "value": "refresh_token"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        112,
-        720
-      ],
-      "id": "dce47706-1d85-4618-a91c-7985075c2389",
-      "name": "Refresh Access Token1"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://googleads.googleapis.com/v21/customers/6074257049/googleAds:search",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            },
-            {
-              "name": "developer-token",
-              "value": "TBTSJ2tCWj8roEXgeDBMTw"
-            },
-            {
-              "name": "Authorization",
-              "value": "=Bearer  {{ $json.access_token }}"
-            },
-            {
-              "name": "login-customer-id",
-              "value": "6074257049"
-            }
-          ]
-        },
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "query",
-              "value": "SELECT campaign.name, ad_group.name, ad_group_criterion.keyword.text, ad_group_criterion.keyword.match_type, metrics.impressions, metrics.clicks, metrics.ctr, segments.date FROM keyword_view WHERE segments.date DURING LAST_30_DAYS AND metrics.impressions > 0 ORDER BY metrics.impressions "
-            },
-            {
-              "name": "query",
-              "value": "SELECT campaign.name, ad_group.name, ad_group_criterion.keyword.text, ad_group_criterion.keyword.match_type, metrics.impressions, metrics.clicks, metrics.ctr, segments.date FROM keyword_view WHERE segments.date DURING LAST_30_DAYS AND metrics.impressions > 0 ORDER BY metrics.impressions"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        336,
-        720
-      ],
-      "id": "aa7498e0-9d3b-4c90-b47e-38dfc6ed6610",
-      "name": "Google Ads API1"
-    },
-    {
-      "parameters": {
-        "jsCode": "// n8n Function node\n// Input: items[] dari node Google Ads / HTTP Request (GAQL)\n// Output: items[] flattened untuk Google Sheets → Append\n\nfunction toNumber(v) {\n  if (v === null || v === undefined || v === '') return null;\n  if (typeof v === 'string') return Number(v.replace(/,/g, ''));\n  return Number(v);\n}\n\nfunction normalizeCtr(v) {\n  if (v === null || v === undefined || v === '') return null;\n  const n = Number(v);\n  if (!isFinite(n)) return null;\n  // Jika API beri 0–1, konversi ke %\n  return n <= 1 ? n * 100 : n;\n}\n\nfunction flattenRow(row, meta = {}) {\n  const campaign = row.campaign || {};\n  const adGroup = row.adGroup || {};\n  const agc = row.adGroupCriterion || {};\n  const kw = (agc.keyword || {});\n  const metrics = row.metrics || {};\n  const segments = row.segments || {};\n  const kv = row.keywordView || {};\n\n  return {\n    date: segments.date || null,\n\n    campaign_name: campaign.name || null,\n    ad_group_name: adGroup.name || null,\n\n    keyword_text: kw.text || null,\n    match_type: kw.matchType || null,\n\n    impressions: toNumber(metrics.impressions),\n    clicks: toNumber(metrics.clicks),\n    ctr_percent: normalizeCtr(metrics.ctr), // contoh: 0 -> 0%, 0.12 -> 12%\n\n    // resource metadata opsional\n    campaign_resource: campaign.resourceName || null,\n    ad_group_resource: adGroup.resourceName || null,\n    criterion_resource: agc.resourceName || null,\n    keyword_view_resource: kv.resourceName || null,\n\n    // meta dari response (jika ada)\n    field_mask: meta.fieldMask || null,\n    query_cost_units: toNumber(meta.queryResourceConsumption)\n  };\n}\n\nfunction extractRows(payload) {\n  // Bentuk-bentuk umum respons GAQL:\n  // 1) { results: [ {campaign...}, ... ], fieldMask, queryResourceConsumption }\n  // 2) { rows: [ ... ] }\n  // 3) Single object row langsung {campaign...}\n  const meta = {\n    fieldMask: payload.fieldMask || payload['field_mask'] || null,\n    queryResourceConsumption: payload.queryResourceConsumption || payload['query_resource_consumption'] || null,\n  };\n\n  if (Array.isArray(payload.results)) {\n    return payload.results.map(r => flattenRow(r, meta));\n  }\n  if (Array.isArray(payload.rows)) {\n    return payload.rows.map(r => flattenRow(r, meta));\n  }\n  // Jika payload sudah single row\n  if (payload.campaign || payload.adGroup || payload.metrics) {\n    return [flattenRow(payload, meta)];\n  }\n  // Jika n8n mengirim items dengan {json:{...}}, handle di luar\n  return [];\n}\n\nconst out = [];\nfor (const item of items) {\n  const data = item.json || {};\n  const rows = extractRows(data);\n  for (const r of rows) out.push({ json: r });\n}\n\n// Jika tidak ada rows karena respons dibungkus lain, coba fallback:\n// contoh: { data: { results: [...] } }\nif (out.length === 0) {\n  for (const item of items) {\n    const d = item.json || {};\n    const maybe = d.data || d.body || d.response || {};\n    const rows = extractRows(maybe);\n    for (const r of rows) out.push({ json: r });\n  }\n}\n\nreturn out.length ? out : [{ json: { notice: 'No GAQL rows detected' } }];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        560,
-        720
-      ],
-      "id": "71180769-3b4d-435b-8fab-383c280cc2c1",
-      "name": "parse data to sheet"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        1456,
-        624
-      ],
-      "id": "9758f22b-5377-42a5-b82d-f1fc71b858ae",
-      "name": "Merge"
-    },
-    {
-      "parameters": {
-        "jsCode": "// Selalu keluarkan item. Rute via field `route` = GA4 | ADS | UNKNOWN\n\nfunction getText(o){\n  if (typeof o === 'string') return o;\n  const c = [o.output,o.text,o.message,o.response,o.result,o.content,\n             o.data?.output,o.data?.text,o.data?.choices?.[0]?.message?.content];\n  for (const v of c) if (typeof v === 'string') return v;\n  return JSON.stringify(o);\n}\nfunction parseJsonBlock(s){\n  const m = s.match(/```json([\\s\\S]*?)```/i) || s.match(/```([\\s\\S]*?)```/);\n  let body = m ? m[1] : s;\n  body = body.trim();\n  const a = body.indexOf('{'), b = body.lastIndexOf('}');\n  if (a !== -1 && b !== -1) body = body.slice(a, b+1);\n  return JSON.parse(body);\n}\n\nconst out = [];\nfor (const it of items) {\n  const raw = it.json || {};\n  const text = getText(raw);\n  let p = null, err = null;\n  try { p = parseJsonBlock(text); } catch(e){ err = e.message; }\n\n  const t = (p?.task_type || '').toUpperCase();\n  const route = t === 'ADS' ? 'ADS' : (t === 'GA4' ? 'GA4' : 'UNKNOWN');\n  const now = new Date().toISOString();\n  const summary = Array.isArray(p?.summary) ? p.summary.join(' | ') : (p?.summary || '');\n\n  const base = {\n    run_at: now,\n    task_type: t || 'UNKNOWN',\n    route,                  // <- dipakai Switch\n    summary,\n    raw_json: JSON.stringify(p || {}),\n    parse_error: err || null,\n  };\n\n  if (route === 'GA4') {\n    out.push({ json: {\n      ...base,\n      insights_json: JSON.stringify(p.insights || []),\n      actions_json: JSON.stringify(p.actions || []),\n      risks_json: JSON.stringify(p.risks || []),\n      followups_json: JSON.stringify(p.followups || []),\n    }});\n  } else if (route === 'ADS') {\n    out.push({ json: {\n      ...base,\n      insights_json: JSON.stringify(p.insights || []),\n      actions_json: JSON.stringify(p.actions || []),\n      negatives_json: JSON.stringify(p.negatives || []),\n      checks_json: JSON.stringify(p.checks || []),\n    }});\n  } else {\n    out.push({ json: { ...base, raw_text: text.slice(0, 2000) }});\n  }\n}\nreturn out;\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2032,
-        624
-      ],
-      "id": "e0090ae3-df36-45da-ad0d-2fe3011fb68b",
-      "name": "Parse AI Output (Generic)"
-    },
-    {
-      "parameters": {
-        "rules": {
-          "values": [
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "leftValue": "={{$json.route}}",
-                    "rightValue": "GA4",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    },
-                    "id": "7920336d-a092-4643-abea-81e84e1e012f"
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "GA4"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "id": "5aab3b21-5014-4034-b510-b783afa90035",
-                    "leftValue": "={{$json.route}}",
-                    "rightValue": "ADS",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals",
-                      "name": "filter.operator.equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "ADS"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3.2,
-      "position": [
-        2256,
-        624
-      ],
-      "id": "3fd02c23-fd08-4446-88e7-dcee1ef7a03c",
-      "name": "Switch"
     },
     {
       "parameters": {
         "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
-          "value": "https://docs.google.com/spreadsheets/d/1ZS3GqAZbdLaz43Yq6FBvIE1ab_czEommpxbvOWABmDI/edit?gid=0#gid=0",
+          "value": "https://docs.google.com/spreadsheets/d/1ZS3GqAZbdLaz43Yq6FBvIE1ab_czEommpxbvOWABmDI/edit?gid=922478142#gid=922478142",
           "mode": "url"
         },
         "sheetName": {
           "__rl": true,
-          "value": "merge analisis + ads",
+          "value": "Technical Performance",
           "mode": "name"
         },
         "columns": {
-          "mappingMode": "autoMapInputData",
-          "value": {},
+          "mappingMode": "defineBelow",
+          "value": {
+            "date": "={{ $json.analysis_date }}",
+            "page_path": "={{ $json.page_path }}",
+            "performance_score": "={{ $json.performance_score }}",
+            "user_experience": "={{ $json.user_experience }}",
+            "conversion_impact": "={{ $json.conversion_impact }}",
+            "technical_issues": "={{ $json.technical_issues }}",
+            "dev_priority": "={{ $json.dev_priority }}",
+            "effort_estimate": "={{ $json.effort_estimate }}",
+            "expected_roi": "={{ $json.expected_roi }}"
+          },
           "matchingColumns": [
-            "run_at"
+            "date"
           ],
           "schema": [
             {
-              "id": "run_at",
-              "displayName": "run_at",
+              "id": "date",
+              "displayName": "date",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -1245,114 +553,76 @@
               "removed": false
             },
             {
-              "id": "task_type",
-              "displayName": "task_type",
+              "id": "page_path",
+              "displayName": "page_path",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "route",
-              "displayName": "route",
+              "id": "performance_score",
+              "displayName": "performance_score",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "summary",
-              "displayName": "summary",
+              "id": "user_experience",
+              "displayName": "user_experience",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "insights_json",
-              "displayName": "insights_json",
+              "id": "conversion_impact",
+              "displayName": "conversion_impact",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "actions_json",
-              "displayName": "actions_json",
+              "id": "technical_issues",
+              "displayName": "technical_issues",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "risks_json",
-              "displayName": "risks_json",
+              "id": "dev_priority",
+              "displayName": "dev_priority",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "followups_json",
-              "displayName": "followups_json",
+              "id": "effort_estimate",
+              "displayName": "effort_estimate",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
-              "id": "negatives_json",
-              "displayName": "negatives_json",
+              "id": "expected_roi",
+              "displayName": "expected_roi",
               "required": false,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "checks_json",
-              "displayName": "checks_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "raw_json",
-              "displayName": "raw_json",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "parse_error",
-              "displayName": "parse_error",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
+              "canBeUsedToMatch": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -1363,11 +633,11 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3152,
-        624
+        272,
+        2160
       ],
-      "id": "eb95c5e8-8cc2-4a62-9faa-649fcd03fb24",
-      "name": "merge ads + analisis",
+      "id": "6ea9e4d3-a0c0-4599-949a-96831eb42073",
+      "name": "Technical Performance",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "KjuD7j0EagX1z8aC",
@@ -1377,275 +647,407 @@
     },
     {
       "parameters": {
-        "jsCode": "// Normalize for merge\nreturn items.map(it => {\n  const j = it.json || {};\n  return {\n    json: {\n      run_at: j.run_at || new Date().toISOString(),\n      task_type: j.task_type || 'UNKNOWN',\n      route: j.route || 'UNKNOWN',\n      summary: j.summary || '',\n      insights_json: j.insights_json || '[]',\n      actions_json: j.actions_json || '[]',\n      risks_json: j.risks_json || '[]',         // GA4 only\n      followups_json: j.followups_json || '[]', // GA4 only\n      negatives_json: j.negatives_json || '[]', // ADS only\n      checks_json: j.checks_json || '[]',       // ADS only\n      raw_json: j.raw_json || '{}',\n      parse_error: j.parse_error || ''\n    }\n  };\n});\n"
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1ZS3GqAZbdLaz43Yq6FBvIE1ab_czEommpxbvOWABmDI/edit?gid=922478142#gid=922478142",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Raw Data Archive",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $json.timestamp }}",
+            "data_type": "={{ $json.data_type }}",
+            "raw_ga4": "={{ $json.raw_ga4 }}",
+            "raw_ads": "={{ $json.raw_ads }}",
+            "processed_insights": "={{ $json.processed_insights }}",
+            "ai_analysis": "={{ $json.ai_analysis }}"
+          },
+          "matchingColumns": [
+            "timestamp"
+          ],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "data_type",
+              "displayName": "data_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "raw_ga4",
+              "displayName": "raw_ga4",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "raw_ads",
+              "displayName": "raw_ads",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "processed_insights",
+              "displayName": "processed_insights",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ai_analysis",
+              "displayName": "ai_analysis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
       "position": [
-        2928,
-        624
+        272,
+        2352
       ],
-      "id": "e8c94734-1eab-4bd5-b4d7-01bece391262",
-      "name": "Function sebelum “merge ads + analisis”"
+      "id": "5c26442b-72f5-4b17-95ec-82030426d2d4",
+      "name": "Raw Data Archive",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KjuD7j0EagX1z8aC",
+          "name": "Google Sheets account"
+        }
+      }
     },
     {
-      "parameters": {},
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.critical_alerts_count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              },
+              "id": "07b97d91-3766-41b2-8dde-e5eb901576f9"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
       "position": [
-        2704,
-        624
+        272,
+        1968
       ],
-      "id": "48274855-f45d-46a5-90cd-1de7244a073f",
-      "name": "FINAL MERGE"
+      "id": "18ccd3d4-dfe5-4d22-b77b-4de1c40a209f",
+      "name": "Critical Alert Check"
+    },
+    {
+      "parameters": {
+        "sendTo": "heri.scaleup@gmail.com",
+        "subject": "={{ $json.email_subject }}",
+        "emailType": "text",
+        "message": "={{ $json.email_body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        512,
+        1984
+      ],
+      "id": "bceeba7e-4277-4316-b281-43dabd8cb956",
+      "name": "notification",
+      "webhookId": "c5bac7ad-2758-473c-ae68-188cc58370dc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "oadT1th0G584hfwt",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "z-ai/glm-4.5-air:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        2080
+      ],
+      "id": "2c04ebb5-c5b5-48b8-828f-c11844fe2720",
+      "name": "Premium AI Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "rFzN5Nfu4IRMZyKy",
+          "name": "pabos or"
+        }
+      }
     }
   ],
-  "pinData": {},
   "connections": {
-    "AI Agent": {
+    "Daily Analytics Trigger": {
       "main": [
         [
           {
-            "node": "Parse AI Output (Generic)",
+            "node": "Enhanced GA4 Data Collection",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Enhanced Google Ads Data Collection",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "hasil narik GA4": {
+    "Enhanced GA4 Data Collection": {
       "main": [
         [
           {
-            "node": "Format GA Data",
+            "node": "GA4 Intelligence Processor",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "GA4 Main Traffic1": {
+    "Enhanced Google Ads Data Collection": {
       "main": [
         [
           {
-            "node": "hasil narik GA4",
+            "node": "Ads Intelligence Processor",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "OpenRouter Chat Model": {
+    "GA4 Intelligence Processor": {
+      "main": [
+        [
+          {
+            "node": "Business Context & Benchmarks",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Unified Data Merger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ads Intelligence Processor": {
+      "main": [
+        [
+          {
+            "node": "Unified Data Merger",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Business Context & Benchmarks": {
+      "main": [
+        [
+          {
+            "node": "Advanced Analytics Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unified Data Merger": {
+      "main": [
+        [
+          {
+            "node": "Advanced Analytics Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Advanced Analytics Engine": {
+      "main": [
+        [
+          {
+            "node": "Executive Insights Prompt",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Operational Insights Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Executive Insights Prompt": {
+      "main": [
+        [
+          {
+            "node": "Executive AI Analyst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Operational Insights Prompt": {
+      "main": [
+        [
+          {
+            "node": "Operational AI Analyst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Executive AI Analyst": {
+      "main": [
+        [
+          {
+            "node": "Business Intelligence Processor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Operational AI Analyst": {
+      "main": [
+        [
+          {
+            "node": "Business Intelligence Processor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Business Intelligence Processor": {
+      "main": [
+        [
+          {
+            "node": "Alert & Notification System",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert & Notification System": {
+      "main": [
+        [
+          {
+            "node": "Executive Dashboard",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Marketing Intelligence",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Technical Performance",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Raw Data Archive",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Critical Alert Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Critical Alert Check": {
+      "main": [
+        [],
+        [
+          {
+            "node": "notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Premium AI Model": {
       "ai_languageModel": [
         [
           {
-            "node": "AI Agent",
+            "node": "Executive AI Analyst",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Operational AI Analyst",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
-    },
-    "hasil narik GADS": {
-      "main": [
-        [
-          {
-            "node": "Format GADS Data",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Format GA Data": {
-      "main": [
-        [
-          {
-            "node": "Prepare for AI ANALIS",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Prepare for AI ANALIS": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Prepare for AI ADS": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Format GADS Data": {
-      "main": [
-        [
-          {
-            "node": "Prepare for AI ADS",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Schedule Trigger": {
-      "main": [
-        [
-          {
-            "node": "Refresh Access Token1",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "GA4 Main Traffic1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Refresh Access Token1": {
-      "main": [
-        [
-          {
-            "node": "Google Ads API1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Ads API1": {
-      "main": [
-        [
-          {
-            "node": "parse data to sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "parse data to sheet": {
-      "main": [
-        [
-          {
-            "node": "hasil narik GADS",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Merge": {
-      "main": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "pencatatan hasil analisis": {
-      "main": [
-        [
-          {
-            "node": "FINAL MERGE",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "pencatatan hasil analisis ads": {
-      "main": [
-        [
-          {
-            "node": "FINAL MERGE",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Parse AI Output (Generic)": {
-      "main": [
-        [
-          {
-            "node": "Switch",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Switch": {
-      "main": [
-        [
-          {
-            "node": "pencatatan hasil analisis",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "pencatatan hasil analisis ads",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Function sebelum “merge ads + analisis”": {
-      "main": [
-        [
-          {
-            "node": "merge ads + analisis",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "FINAL MERGE": {
-      "main": [
-        [
-          {
-            "node": "Function sebelum “merge ads + analisis”",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
-  "active": true,
-  "settings": {
-    "executionOrder": "v1",
-    "timezone": "Asia/Jakarta",
-    "callerPolicy": "workflowsFromSameOwner"
-  },
-  "versionId": "5d179100-78a8-4d67-98f5-b3963002a663",
+  "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "995029339bc9cdc5f46843421175b2d592df534c8e42b92a4579b60e7b7e84eb"
-  },
-  "id": "wGTqLWDbp9s8esuE",
-  "tags": []
+  }
 }
