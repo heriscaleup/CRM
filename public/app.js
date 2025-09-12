@@ -66,6 +66,7 @@ async function runAnalysis() {
         return;
       } catch (e) {}
     }
+    document.getElementById('output').textContent = err.message;
     document.getElementById('runStatus').textContent = 'Error';
   }
 }
