@@ -1,21 +1,23 @@
-# CRM Dashboard
+# Marketing Analytics Dashboard
 
-Simple web interface to trigger the existing n8n workflow and display its output.
+Web interface to trigger an n8n workflow for marketing data analysis. Provides progress tracking, log output and a results dashboard with executive summary, channel performance and recommendations.
 
 ## Setup
-
 1. Install dependencies:
    ```bash
    npm install
    ```
-2. Copy `.env.sample` to `.env` and fill in your `N8N_WEBHOOK_URL`.
-3. Start the server:
+2. Copy `.env.sample` to `.env` and set `N8N_WEBHOOK_URL`.
+3. For static hosting (GitHub Pages), edit `public/config.js` to configure `CONFIG.N8N_WEBHOOK_URL` and other settings.
+4. Start the server:
    ```bash
    npm start
    ```
-4. Open http://localhost:3000 in your browser and use the **Run Analysis** button.
+5. Open http://localhost:3000 and click **Jalankan Analisis**.
 
-## Development
-- The n8n workflow configuration is stored in `workflow.json` and exposed at `/api/workflow`.
-- API endpoint `/api/run` posts to `N8N_WEBHOOK_URL` and returns the result.
-
+## Features
+- Trigger n8n workflow via webhook
+- Progress bar with four execution stages
+- Real-time log display and raw JSON output
+- Results dashboard with summary, channel scores, alerts and recommendations
+- Demo mode using mock data when no backend is available

@@ -2,70 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>CRM Dashboard</title>
+  <title>Marketing Analytics Dashboard</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-  <div class="sidebar">
-    <h2>CRM</h2>
-    <ul>
-      <li class="active">Dashboard</li>
+  <header class="topbar">
+    <h1>Marketing Analytics</h1>
+    <button id="runBtn"><i class="fa fa-play"></i> Jalankan Analisis</button>
+  </header>
+
+  <section id="progressSection">
+    <ul id="progressSteps">
+      <li class="active">Data Collection</li>
+      <li>AI Processing</li>
+      <li>Analysis</li>
+      <li>Storage</li>
     </ul>
-  </div>
-  <div class="main">
-    <header class="topbar">
-      <h1>Dashboard</h1>
-      <button id="runBtn">Run Analysis</button>
-    </header>
+  </section>
 
-    <section class="summary-cards">
-      <div class="card">
-        <h3>Workflow Name</h3>
-        <p id="workflowName">-</p>
-      </div>
-      <div class="card">
-        <h3>Nodes</h3>
-        <p id="nodeCount">-</p>
-      </div>
-      <div class="card">
-        <h3>Last Run</h3>
-        <p id="lastRun">-</p>
-      </div>
-      <div class="card">
-        <h3>Status</h3>
-        <p id="runStatus">-</p>
-      </div>
-      <div class="card">
-        <h3>Total Users</h3>
-        <p id="totalUsers">-</p>
-      </div>
-      <div class="card">
-        <h3>Total Sessions</h3>
-        <p id="totalSessions">-</p>
-      </div>
-      <div class="card">
-        <h3>Avg Bounce Rate</h3>
-        <p id="avgBounceRate">-</p>
-      </div>
-    </section>
+  <section id="resultsSection">
+    <h2>Results</h2>
+    <div id="summary" class="card"></div>
+    <div id="channels" class="card"></div>
+    <div id="alerts" class="card"></div>
+    <div id="recommendations" class="card"></div>
+    <a id="sheetsLink" href="#" target="_blank" class="btn">Open Google Sheets</a>
+  </section>
 
-    <section class="charts">
-      <div class="chart-card">
-        <canvas id="lineChart"></canvas>
-      </div>
-      <div class="chart-card">
-        <canvas id="doughnutChart"></canvas>
-      </div>
-    </section>
+  <section id="logsSection">
+    <h2>Logs</h2>
+    <pre id="log"></pre>
+  </section>
 
-    <section>
-      <h2>Raw Output</h2>
-      <pre id="output"></pre>
-    </section>
-  </div>
+  <section id="rawSection">
+    <h2>Raw Output</h2>
+    <pre id="output"></pre>
+  </section>
 
   <script src="config.js"></script>
-  <script src="app.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

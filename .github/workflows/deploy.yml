@@ -25,6 +25,7 @@ jobs:
       - run: mkdir dist
       - run: cp -r public/* dist/
       - run: cp workflow.json dist/
+      - run: cp _config.yml dist/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
